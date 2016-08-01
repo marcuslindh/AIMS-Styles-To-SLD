@@ -1,1 +1,16 @@
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.exe.config
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\Application.g.vb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD_MarkupCompile.cache
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.exe
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.pdb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.xml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\MainWindow.baml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\MainWindow.g.vb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.g.resources
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS_Styles_To_SLD.Resources.resources
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.vbproj.GenerateResource.Cache
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.exe
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.xml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.pdb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\Login.baml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\Login.g.vb
