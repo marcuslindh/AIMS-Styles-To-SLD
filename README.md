@@ -6,7 +6,8 @@ Export Autodesk Infrastructure Map Server Layer styles to SLD format
 - [x] Support Area/Polygon Style
 - [X] Support Line Style
 - [ ] Support Point Style
-- [ ] Support Labels
+- [x] Support Labels
+- [ ] Support Labels position/Rotation
 - [x] Show scales for layers 
 - [ ] Icons in Treeview
 
