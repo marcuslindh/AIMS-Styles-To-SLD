@@ -3,8 +3,8 @@ Export Autodesk Infrastructure Map Server Layer styles to SLD format
 
 ## Todo
 - [x] Support filters
-- [x] Suppoer Area/Polygon Style
-- [ ] Suppoer Line Style
+- [x] Support Area/Polygon Style
+- [ ] Support Line Style
 - [x] Show scales for layers 
 - [ ] Icons in Treeview
 
