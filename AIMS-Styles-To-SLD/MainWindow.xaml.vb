@@ -370,6 +370,36 @@ Class MainWindow
                         End If
 
                         SLD.Append("</LineSymbolizer>" & vbCrLf)
+                    ElseIf item2.Type = LayerStyle.LayerStyleType.Point Then
+
+                        If Not String.IsNullOrWhiteSpace(item3.Label.Text) Then
+                            SLD.Append("<TextSymbolizer>" & vbCrLf)
+                            SLD.Append("<Label>" & vbCrLf)
+                            SLD.Append("<ogc:PropertyName>" & item3.Label.Text.Replace("""", "").Replace("'", "") & "</ogc:PropertyName>" & vbCrLf)
+                            SLD.Append("</Label>" & vbCrLf)
+
+                            SLD.Append("<Font>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY & "</CssParameter>" & vbCrLf)
+
+                            If item3.Label.Italic = True Then
+                                SLD.Append("<CssParameter name=""font-style"">italic</CssParameter>" & vbCrLf)
+                            Else
+                                SLD.Append("<CssParameter name=""font-style"">normal</CssParameter>" & vbCrLf)
+                            End If
+
+                            If item3.Label.Bold = True Then
+                                SLD.Append("<CssParameter name=""font-weight"">bold</CssParameter>" & vbCrLf)
+                            End If
+
+                            SLD.Append("</Font>" & vbCrLf)
+
+                            SLD.Append("<Fill>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""fill"">#" & item3.Label.ForegroundColor.Substring(2, item3.Label.ForegroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                            SLD.Append("</Fill>" & vbCrLf)
+
+                            SLD.Append("</TextSymbolizer>" & vbCrLf)
+                        End If
                     End If
 
 

@@ -311,7 +311,7 @@ Public Class AIMS
                 For Each LineTypeStyleItem In LineTypeStyle
                     Dim Style As New LayerStyle
                     Style.Type = LayerStyle.LayerStyleType.Line
-                    Dim AreaRule = LineTypeStyle.Descendants("LineRule")
+                    Dim AreaRule = LineTypeStyleItem.Descendants("LineRule")
                     For Each AreaRuleItem In AreaRule
                         Dim Rule As New LayerStyleRule
 
@@ -330,6 +330,43 @@ Public Class AIMS
                     Next
 
 
+                    ScaleRange.Style.Add(Style)
+                Next
+
+                Dim PointTypeStyle = item.Descendants("PointTypeStyle")
+                For Each PointTypeStyleItem In PointTypeStyle
+                    Dim Style As New LayerStyle
+                    Style.Type = LayerStyle.LayerStyleType.Point
+                    Dim PointRule = PointTypeStyleItem.Descendants("PointRule")
+                    For Each PointRuleItem In PointRule
+                        Dim Rule As New LayerStyleRule
+                        Rule.LegendLabel = Tools.IfElementToString(PointRuleItem.Element("LegendLabel"))
+
+                        Dim Label = PointRuleItem.Descendants("Label")
+                        For Each LabelItem In Label
+                            Rule.Label.Unit = Tools.IfElementToString(LabelItem.Element("Unit"))
+                            Rule.Label.SizeContext = Tools.IfElementToString(LabelItem.Element("SizeContext"))
+                            Rule.Label.SizeX = Tools.IfElementToString(LabelItem.Element("SizeX"))
+                            Rule.Label.SizeY = Tools.IfElementToString(LabelItem.Element("SizeY"))
+                            Rule.Label.Rotation = Tools.IfElementToString(LabelItem.Element("Rotation"))
+                            Rule.Label.Text = Tools.IfElementToString(LabelItem.Element("Text"))
+                            Rule.Label.FontName = Tools.IfElementToString(LabelItem.Element("FontName"))
+                            Rule.Label.ForegroundColor = Tools.IfElementToString(LabelItem.Element("ForegroundColor"))
+                            Rule.Label.BackgroundColor = Tools.IfElementToString(LabelItem.Element("BackgroundColor"))
+                            Rule.Label.HorizontalAlignment = Tools.IfElementToString(LabelItem.Element("HorizontalAlignment"))
+                            Rule.Label.Italic = Tools.IfElementToBoolean(LabelItem.Element("Italic"))
+                            Rule.Label.Bold = Tools.IfElementToBoolean(LabelItem.Element("Bold"))
+                            Rule.Label.Underlined = Tools.IfElementToBoolean(LabelItem.Element("Underlined"))
+
+                            Dim AdvancedPlacement = LabelItem.Descendants("AdvancedPlacement")
+                            For Each AdvancedPlacementItem In AdvancedPlacement
+                                Rule.Label.AdvancedPlacement.ScaleLimit = Tools.IfElementToString(AdvancedPlacementItem.Element("ScaleLimit"))
+                            Next
+                        Next
+
+
+                        Style.Rules.Add(Rule)
+                    Next
                     ScaleRange.Style.Add(Style)
                 Next
 
@@ -521,6 +558,7 @@ Public Class LayerStyle
     Public Enum LayerStyleType
         Area = 1
         Line = 2
+        Point = 3
     End Enum
 
     Public Property Type As LayerStyleType
@@ -535,7 +573,7 @@ Public Class LayerStyleRule
     Public Property Filter As String = ""
     Public Property Fill As New StyleRuleFill
     Public Property Stroke As New StyleRuleStroke
-
+    Public Property Label As New StyleRuleLabel
 End Class
 
 Public Class StyleRuleFill
@@ -551,4 +589,26 @@ Public Class StyleRuleStroke
     Public Property Color As String = ""
     Public Property Unit As String = ""
     Public Property SizeContext As String = ""
+End Class
+
+Public Class StyleRuleLabel
+    Public Property Unit As String = ""
+    Public Property SizeContext As String = ""
+    Public Property SizeX As String = ""
+    Public Property SizeY As String = ""
+    Public Property Rotation As String = ""
+    Public Property Text As String = ""
+    Public Property FontName As String = ""
+    Public Property ForegroundColor As String = ""
+    Public Property BackgroundColor As String = ""
+    Public Property BackgroundStyle As String = ""
+    Public Property HorizontalAlignment As String = ""
+    Public Property Italic As Boolean = False
+    Public Property Bold As Boolean = False
+    Public Property Underlined As Boolean = False
+    Public Property AdvancedPlacement As New StyleRuleLabelAdvancedPlacement
+End Class
+
+Public Class StyleRuleLabelAdvancedPlacement
+    Public Property ScaleLimit As String = ""
 End Class
