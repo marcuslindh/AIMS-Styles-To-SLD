@@ -14,3 +14,5 @@ C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\De
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.pdb
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\Login.baml
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\Login.g.vb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\SLD_Window.baml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\SLD_Window.g.vb

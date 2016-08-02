@@ -13,9 +13,9 @@ Imports System.Windows
 
 <Assembly: AssemblyTitle("AIMS_Styles_To_SLD")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("IT Umea kommun")> 
+<Assembly: AssemblyCompany("Marcus Lindh")> 
 <Assembly: AssemblyProduct("AIMS_Styles_To_SLD")> 
-<Assembly: AssemblyCopyright("Copyright © IT Umea kommun 2016")> 
+<Assembly: AssemblyCopyright("Copyright © Marcus Lindh 2016")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 

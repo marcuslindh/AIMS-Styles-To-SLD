@@ -22,13 +22,13 @@
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Content="Log on to the Map Server site" FontSize="22" Background="#FFB9B9B9" />
         
         <Label Grid.Row="2" Grid.Column="0" Content="Site:" />
-        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Site" Margin="5" />
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Site" Margin="5" TabIndex="1" />
 
         <Label Grid.Row="3" Grid.Column="0" Content="Username:" />
-        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Username" Margin="5" />
+        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Username" Margin="5" TabIndex="2" />
 
         <Label Grid.Row="4" Grid.Column="0" Content="Password:" />
-        <PasswordBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Password" Margin="5" />
+        <PasswordBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" x:Name="Password" Margin="5" TabIndex="0" />
 
         <Button Grid.Row="6" Grid.Column="2" Content="OK" x:Name="Login" Margin="10" IsDefault="True" Click="Login_Click" />
         <Button Grid.Row="6" Grid.Column="3" Content="Cancel" x:Name="Cancel" Margin="10" IsCancel="True" Click="Cancel_Click" />

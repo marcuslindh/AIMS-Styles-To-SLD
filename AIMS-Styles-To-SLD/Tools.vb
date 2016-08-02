@@ -57,6 +57,12 @@ Public Class Tools
         End If
     End Function
 
+    Public Shared Function StringToLong(str As String) As Long
+        Dim res As Long = 0
+        Long.TryParse(str, res)
+        Return res
+    End Function
+
 
 End Class
 

@@ -10,6 +10,12 @@ Public Class AIMS
     Private Property Session As String = ""
     Private Property Server As String = ""
 
+    Public ReadOnly Property Site As String
+        Get
+            Return Server
+        End Get
+    End Property
+
     Public Function HTTPGet(URL As String) As String
         Dim Request = WebRequest.Create(URL)
         Tools.SetBasicAuthHeader(Request, UserName, Password)
@@ -60,10 +66,10 @@ Public Class AIMS
         Result.Version = SiteServer.Element("Version").Value
 
         Dim OperatingSystem = SiteServer.Descendants("OperatingSystem")(0)
-        Result.AvailablePhysicalMemory = OperatingSystem.Element("AvailablePhysicalMemory").Value
-        Result.TotalPhysicalMemory = OperatingSystem.Element("TotalPhysicalMemory").Value
-        Result.AvailableVirtualMemory = OperatingSystem.Element("AvailableVirtualMemory").Value
-        Result.TotalVirtualMemory = OperatingSystem.Element("TotalVirtualMemory").Value
+        Result.AvailablePhysicalMemory = Tools.StringToLong(OperatingSystem.Element("AvailablePhysicalMemory").Value)
+        Result.TotalPhysicalMemory = Tools.StringToLong(OperatingSystem.Element("TotalPhysicalMemory").Value)
+        Result.AvailableVirtualMemory = Tools.StringToLong(OperatingSystem.Element("AvailableVirtualMemory").Value)
+        Result.TotalVirtualMemory = Tools.StringToLong(OperatingSystem.Element("TotalVirtualMemory").Value)
         Result.OperatingSystemVersion = OperatingSystem.Element("Version").Value
 
         Dim Statistics = xml.Descendants("Statistics")(0)
@@ -237,73 +243,75 @@ Public Class AIMS
 
         Dim Result As New LayerDefinition
 
-        Dim VLD = xml.Descendants("VectorLayerDefinition")(0)
+        For Each VLD In xml.Descendants("VectorLayerDefinition")
+            'Dim VLD = xml.Descendants("VectorLayerDefinition")(0)
 
-        Result.ResourceId = Tools.IfElementToString(VLD.Element("ResourceId"))
-        Result.FeatureName = Tools.IfElementToString(VLD.Element("FeatureName"))
-        Result.FeatureNameType = Tools.IfElementToString(VLD.Element("FeatureNameType"))
+            Result.ResourceId = Tools.IfElementToString(VLD.Element("ResourceId"))
+            Result.FeatureName = Tools.IfElementToString(VLD.Element("FeatureName"))
+            Result.FeatureNameType = Tools.IfElementToString(VLD.Element("FeatureNameType"))
 
-        Dim PropertyMappings = VLD.Descendants("PropertyMapping")
-        For Each item In PropertyMappings
-            Result.PropertyMapping.Add(New PropertyMapping With {
-                                       .Name = Tools.IfElementToString(item.Element("Name")),
-                                       .Value = Tools.IfElementToString(item.Element("Value"))
-                                   })
-        Next
-
-
-        Result.Geometry = Tools.IfElementToString(VLD.Element("Geometry"))
-        Result.ToolTip = Tools.IfElementToString(VLD.Element("ToolTip"))
-
-        Dim VectorScaleRange = VLD.Descendants("VectorScaleRange")
-
-        For Each item In VectorScaleRange
-            Dim ScaleRange As New VectorScaleRange
-            ScaleRange.MaxScale = Tools.IfElementToInteger(item.Element("MaxScale"))
-            ScaleRange.MinScale = Tools.IfElementToInteger(item.Element("MinScale"))
-
-            Dim AreaTypeStyle = item.Descendants("AreaTypeStyle")
-            For Each AreaTypeStyleItem In AreaTypeStyle
-                Dim Style As New LayerStyle
-                Style.Type = LayerStyle.LayerStyleType.Area
-
-                Dim AreaRule = AreaTypeStyleItem.Descendants("AreaRule")
-                For Each AreaRuleItem In AreaRule
-                    Dim Rule As New LayerStyleRule
-
-                    Rule.LegendLabel = Tools.IfElementToString(AreaRuleItem.Element("LegendLabel"))
-                    Rule.Filter = Tools.IfElementToString(AreaRuleItem.Element("Filter"))
-
-                    Dim AreaSymbolization2D = AreaRuleItem.Descendants("AreaSymbolization2D")
-                    For Each AreaSymbolization2DItem In AreaSymbolization2D
-                        Dim Fill = AreaSymbolization2DItem.Descendants("Fill")
-                        For Each FillItem In Fill
-                            Rule.Fill.FillPattern = Tools.IfElementToString(FillItem.Element("FillPattern"))
-                            Rule.Fill.ForegroundColor = Tools.IfElementToString(FillItem.Element("ForegroundColor"))
-                            Rule.Fill.BackgroundColor = Tools.IfElementToString(FillItem.Element("BackgroundColor"))
-                        Next
-
-                        Dim Stroke = AreaSymbolization2DItem.Descendants("Stroke")
-                        For Each StrokeItem In Stroke
-                            Rule.Stroke.LineStyle = Tools.IfElementToString(StrokeItem.Element("LineStyle"))
-                            Rule.Stroke.Thickness = Tools.IfElementToString(StrokeItem.Element("Thickness"))
-                            Rule.Stroke.Color = Tools.IfElementToString(StrokeItem.Element("Color"))
-                            Rule.Stroke.Unit = Tools.IfElementToString(StrokeItem.Element("Unit"))
-                            Rule.Stroke.SizeContext = Tools.IfElementToString(StrokeItem.Element("SizeContext"))
-                        Next
-                    Next
-
-
-                    Style.Rules.Add(Rule)
-                Next
-
-                ScaleRange.Style.Add(Style)
+            Dim PropertyMappings = VLD.Descendants("PropertyMapping")
+            For Each item In PropertyMappings
+                Result.PropertyMapping.Add(New PropertyMapping With {
+                                           .Name = Tools.IfElementToString(item.Element("Name")),
+                                           .Value = Tools.IfElementToString(item.Element("Value"))
+                                       })
             Next
 
 
-            Result.VectorScaleRange.Add(ScaleRange)
-        Next
+            Result.Geometry = Tools.IfElementToString(VLD.Element("Geometry"))
+            Result.ToolTip = Tools.IfElementToString(VLD.Element("ToolTip"))
 
+            Dim VectorScaleRange = VLD.Descendants("VectorScaleRange")
+
+            For Each item In VectorScaleRange
+                Dim ScaleRange As New VectorScaleRange
+                ScaleRange.MaxScale = Tools.IfElementToInteger(item.Element("MaxScale"))
+                ScaleRange.MinScale = Tools.IfElementToInteger(item.Element("MinScale"))
+
+                Dim AreaTypeStyle = item.Descendants("AreaTypeStyle")
+                For Each AreaTypeStyleItem In AreaTypeStyle
+                    Dim Style As New LayerStyle
+                    Style.Type = LayerStyle.LayerStyleType.Area
+
+                    Dim AreaRule = AreaTypeStyleItem.Descendants("AreaRule")
+                    For Each AreaRuleItem In AreaRule
+                        Dim Rule As New LayerStyleRule
+
+                        Rule.LegendLabel = Tools.IfElementToString(AreaRuleItem.Element("LegendLabel"))
+                        Rule.Filter = Tools.IfElementToString(AreaRuleItem.Element("Filter"))
+
+                        Dim AreaSymbolization2D = AreaRuleItem.Descendants("AreaSymbolization2D")
+                        For Each AreaSymbolization2DItem In AreaSymbolization2D
+                            Dim Fill = AreaSymbolization2DItem.Descendants("Fill")
+                            For Each FillItem In Fill
+                                Rule.Fill.FillPattern = Tools.IfElementToString(FillItem.Element("FillPattern"))
+                                Rule.Fill.ForegroundColor = Tools.IfElementToString(FillItem.Element("ForegroundColor"))
+                                Rule.Fill.BackgroundColor = Tools.IfElementToString(FillItem.Element("BackgroundColor"))
+                            Next
+
+                            Dim Stroke = AreaSymbolization2DItem.Descendants("Stroke")
+                            For Each StrokeItem In Stroke
+                                Rule.Stroke.LineStyle = Tools.IfElementToString(StrokeItem.Element("LineStyle"))
+                                Rule.Stroke.Thickness = Tools.IfElementToString(StrokeItem.Element("Thickness"))
+                                Rule.Stroke.Color = Tools.IfElementToString(StrokeItem.Element("Color"))
+                                Rule.Stroke.Unit = Tools.IfElementToString(StrokeItem.Element("Unit"))
+                                Rule.Stroke.SizeContext = Tools.IfElementToString(StrokeItem.Element("SizeContext"))
+                            Next
+                        Next
+
+
+                        Style.Rules.Add(Rule)
+                    Next
+
+                    ScaleRange.Style.Add(Style)
+                Next
+
+
+                Result.VectorScaleRange.Add(ScaleRange)
+            Next
+
+        Next
 
         Return Result
     End Function
