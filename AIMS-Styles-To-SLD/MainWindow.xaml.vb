@@ -338,17 +338,38 @@ Class MainWindow
 
                         If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
                             SLD.Append("<Stroke>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Fill.ForegroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
                             Dim Thickness As String = item3.Stroke.Thickness
                             If item3.Stroke.Thickness = 0 Then
                                 Thickness = "0.5"
                             End If
                             SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                            If item3.Stroke.LineStyle = "Dash" Then
+                                SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                            End If
                             SLD.Append("</Stroke>" & vbCrLf)
                         End If
 
 
                         SLD.Append("</PolygonSymbolizer>" & vbCrLf)
+                    ElseIf item2.Type = LayerStyle.LayerStyleType.Line Then
+                        SLD.Append("<LineSymbolizer>" & vbCrLf)
+
+                        If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
+                            SLD.Append("<Stroke>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+                            Dim Thickness As String = item3.Stroke.Thickness
+                            If item3.Stroke.Thickness = 0 Then
+                                Thickness = "0.5"
+                            End If
+                            SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                            If item3.Stroke.LineStyle = "Dash" Then
+                                SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                            End If
+                            SLD.Append("</Stroke>" & vbCrLf)
+                        End If
+
+                        SLD.Append("</LineSymbolizer>" & vbCrLf)
                     End If
 
 

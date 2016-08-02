@@ -307,6 +307,32 @@ Public Class AIMS
                     ScaleRange.Style.Add(Style)
                 Next
 
+                Dim LineTypeStyle = item.Descendants("LineTypeStyle")
+                For Each LineTypeStyleItem In LineTypeStyle
+                    Dim Style As New LayerStyle
+                    Style.Type = LayerStyle.LayerStyleType.Line
+                    Dim AreaRule = LineTypeStyle.Descendants("LineRule")
+                    For Each AreaRuleItem In AreaRule
+                        Dim Rule As New LayerStyleRule
+
+                        Rule.LegendLabel = Tools.IfElementToString(AreaRuleItem.Element("LegendLabel"))
+                        Rule.Filter = Tools.IfElementToString(AreaRuleItem.Element("Filter"))
+
+                        Dim LineSymbolization2D = AreaRuleItem.Descendants("LineSymbolization2D")
+                        For Each LineSymbolization2DItem In LineSymbolization2D
+                            Rule.Stroke.LineStyle = Tools.IfElementToString(LineSymbolization2DItem.Element("LineStyle"))
+                            Rule.Stroke.Thickness = Tools.IfElementToString(LineSymbolization2DItem.Element("Thickness"))
+                            Rule.Stroke.Color = Tools.IfElementToString(LineSymbolization2DItem.Element("Color"))
+                            Rule.Stroke.Unit = Tools.IfElementToString(LineSymbolization2DItem.Element("Unit"))
+                            Rule.Stroke.SizeContext = Tools.IfElementToString(LineSymbolization2DItem.Element("SizeContext"))
+                        Next
+                        Style.Rules.Add(Rule)
+                    Next
+
+
+                    ScaleRange.Style.Add(Style)
+                Next
+
 
                 Result.VectorScaleRange.Add(ScaleRange)
             Next
@@ -494,6 +520,7 @@ End Class
 Public Class LayerStyle
     Public Enum LayerStyleType
         Area = 1
+        Line = 2
     End Enum
 
     Public Property Type As LayerStyleType
