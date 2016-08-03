@@ -312,13 +312,16 @@ Class MainWindow
             For Each item2 In item.Style
 
                 For Each item3 In item2.Rules
+                    If item3.Fill.FillPattern = "" And item3.Stroke.LineStyle = "" And item3.Label.FontName = "" Then Continue For
+
+
                     SLD.Append("<Rule>" & vbCrLf)
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
                     End If
                     If Not item.MinScale = -1 Then
-                        SLD.Append("<MinScaleDenominator>" & item.MaxScale & "</MinScaleDenominator>" & vbCrLf)
+                        SLD.Append("<MinScaleDenominator>" & item.MinScale & "</MinScaleDenominator>" & vbCrLf)
                     End If
 
                     If Not String.IsNullOrWhiteSpace(item3.Filter) Then
@@ -353,23 +356,25 @@ Class MainWindow
 
                         SLD.Append("</PolygonSymbolizer>" & vbCrLf)
                     ElseIf item2.Type = LayerStyle.LayerStyleType.Line Then
-                        SLD.Append("<LineSymbolizer>" & vbCrLf)
+                        If Not item3.Fill.FillPattern = "" Or Not item3.Stroke.LineStyle = "" Then
+                            SLD.Append("<LineSymbolizer>" & vbCrLf)
 
-                        If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
-                            SLD.Append("<Stroke>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
-                            Dim Thickness As String = item3.Stroke.Thickness
-                            If item3.Stroke.Thickness = 0 Then
-                                Thickness = "0.5"
+                            If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
+                                SLD.Append("<Stroke>" & vbCrLf)
+                                SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+                                Dim Thickness As String = item3.Stroke.Thickness
+                                If item3.Stroke.Thickness = 0 Then
+                                    Thickness = "0.5"
+                                End If
+                                SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                                If item3.Stroke.LineStyle = "Dash" Then
+                                    SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                                End If
+                                SLD.Append("</Stroke>" & vbCrLf)
                             End If
-                            SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
-                            If item3.Stroke.LineStyle = "Dash" Then
-                                SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
-                            End If
-                            SLD.Append("</Stroke>" & vbCrLf)
+
+                            SLD.Append("</LineSymbolizer>" & vbCrLf)
                         End If
-
-                        SLD.Append("</LineSymbolizer>" & vbCrLf)
                     ElseIf item2.Type = LayerStyle.LayerStyleType.Point Then
 
                         If Not String.IsNullOrWhiteSpace(item3.Label.Text) Then
@@ -380,7 +385,21 @@ Class MainWindow
 
                             SLD.Append("<Font>" & vbCrLf)
                             SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY & "</CssParameter>" & vbCrLf)
+
+                            Dim FontSize As Double = 0
+                            Select Case item3.Label.Unit
+                                Case "Millimeters"
+                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 0.3528)
+                                Case "Centimeters"
+                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 100) * 0.3528
+                                Case "Meters"
+                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 1000) * 0.3528
+                                Case "Points"
+                                    FontSize = Double.Parse(item3.Label.SizeY.Replace(".", ","))
+                            End Select
+
+
+                            SLD.Append("<CssParameter name=""font-size"">" & Math.Round(FontSize, 2).ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
 
                             If item3.Label.Italic = True Then
                                 SLD.Append("<CssParameter name=""font-style"">italic</CssParameter>" & vbCrLf)
@@ -398,13 +417,24 @@ Class MainWindow
                             SLD.Append("<CssParameter name=""fill"">#" & item3.Label.ForegroundColor.Substring(2, item3.Label.ForegroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
                             SLD.Append("</Fill>" & vbCrLf)
 
+                            If Not item3.Label.BackgroundStyle = "Ghosted" Then
+                                SLD.Append("<Graphic>" & vbCrLf)
+                                SLD.Append("<Mark>" & vbCrLf)
+                                SLD.Append("<WellKnownName>square</WellKnownName>" & vbCrLf)
+                                SLD.Append("<Fill>" & vbCrLf)
+                                SLD.Append("<CssParameter name=""fill"">#" & item3.Label.BackgroundColor.Substring(2, item3.Label.BackgroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                                SLD.Append("</Fill>" & vbCrLf)
+                                SLD.Append("</Mark>" & vbCrLf)
+                                SLD.Append("</Graphic>" & vbCrLf)
+                            End If
+
                             SLD.Append("</TextSymbolizer>" & vbCrLf)
                         End If
-                    End If
+                        End If
 
 
 
-                    SLD.Append("</Rule>" & vbCrLf)
+                        SLD.Append("</Rule>" & vbCrLf)
                 Next
             Next
         Next

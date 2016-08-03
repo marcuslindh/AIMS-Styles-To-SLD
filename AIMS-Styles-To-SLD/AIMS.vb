@@ -311,14 +311,14 @@ Public Class AIMS
                 For Each LineTypeStyleItem In LineTypeStyle
                     Dim Style As New LayerStyle
                     Style.Type = LayerStyle.LayerStyleType.Line
-                    Dim AreaRule = LineTypeStyleItem.Descendants("LineRule")
-                    For Each AreaRuleItem In AreaRule
+                    Dim LineRule = LineTypeStyleItem.Descendants("LineRule")
+                    For Each LineRuleItem In LineRule
                         Dim Rule As New LayerStyleRule
 
-                        Rule.LegendLabel = Tools.IfElementToString(AreaRuleItem.Element("LegendLabel"))
-                        Rule.Filter = Tools.IfElementToString(AreaRuleItem.Element("Filter"))
+                        Rule.LegendLabel = Tools.IfElementToString(LineRuleItem.Element("LegendLabel"))
+                        Rule.Filter = Tools.IfElementToString(LineRuleItem.Element("Filter"))
 
-                        Dim LineSymbolization2D = AreaRuleItem.Descendants("LineSymbolization2D")
+                        Dim LineSymbolization2D = LineRuleItem.Descendants("LineSymbolization2D")
                         For Each LineSymbolization2DItem In LineSymbolization2D
                             Rule.Stroke.LineStyle = Tools.IfElementToString(LineSymbolization2DItem.Element("LineStyle"))
                             Rule.Stroke.Thickness = Tools.IfElementToString(LineSymbolization2DItem.Element("Thickness"))
@@ -341,6 +341,7 @@ Public Class AIMS
                     For Each PointRuleItem In PointRule
                         Dim Rule As New LayerStyleRule
                         Rule.LegendLabel = Tools.IfElementToString(PointRuleItem.Element("LegendLabel"))
+                        Rule.Filter = Tools.IfElementToString(PointRuleItem.Element("Filter"))
 
                         Dim Label = PointRuleItem.Descendants("Label")
                         For Each LabelItem In Label
@@ -352,6 +353,7 @@ Public Class AIMS
                             Rule.Label.Text = Tools.IfElementToString(LabelItem.Element("Text"))
                             Rule.Label.FontName = Tools.IfElementToString(LabelItem.Element("FontName"))
                             Rule.Label.ForegroundColor = Tools.IfElementToString(LabelItem.Element("ForegroundColor"))
+                            Rule.Label.BackgroundStyle = Tools.IfElementToString(LabelItem.Element("BackgroundStyle"))
                             Rule.Label.BackgroundColor = Tools.IfElementToString(LabelItem.Element("BackgroundColor"))
                             Rule.Label.HorizontalAlignment = Tools.IfElementToString(LabelItem.Element("HorizontalAlignment"))
                             Rule.Label.Italic = Tools.IfElementToBoolean(LabelItem.Element("Italic"))
