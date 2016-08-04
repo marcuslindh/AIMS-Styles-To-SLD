@@ -12,12 +12,13 @@ Export Autodesk Infrastructure Map Server Layer styles to SLD format
 - [ ] Icons in Treeview
 
 ## Features
-### Simple filter conditions
+### Supported filter conditions
 - <
 - <=
 - &#62;
 - &#62;=
 - AND
 - OR
+- IN
 
 

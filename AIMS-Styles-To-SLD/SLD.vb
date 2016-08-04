@@ -28,7 +28,17 @@ Public Class SLD
                     word += Filter.Substring(i, 1)
                 End If
             Else
-                word += Filter.Substring(i, 1)
+
+
+                If Filter.Substring(i, 1) = "(" Then
+                    Dim SP As New SyntaxPart With {.text = word}
+                    SP.text = "("
+                    SP.Type = SyntaxPart.SyntaxPartType.String
+                    result.Add(SP)
+                    word = ""
+                Else
+                    word += Filter.Substring(i, 1)
+                End If
 
                 If isString = False Then
                     If Filter.Substring(i, 1) = "'" Or Filter.Substring(i, 1) = """" Then
