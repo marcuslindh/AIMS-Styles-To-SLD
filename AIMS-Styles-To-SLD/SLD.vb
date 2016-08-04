@@ -2,7 +2,7 @@
 Imports System.Xml
 
 Public Class SLD
-    Public Shared Function GenerateFilter(Filter As String)
+    Public Shared Function GenerateFilter(Filter As String) As StringBuilder
         Dim result As New List(Of SyntaxPart)
         Dim word As String = ""
         Dim isString As Boolean = False
@@ -195,7 +195,7 @@ Public Class SLD
 
 
 
-        Console.WriteLine(Filter)
+        'Console.WriteLine(Filter)
         Return res
         'Return JsonConvert.SerializeObject(NewResult, Formatting.Indented)
     End Function

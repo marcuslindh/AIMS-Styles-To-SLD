@@ -75,6 +75,7 @@
     <Compile Include="Login.xaml.vb">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SLD.vb" />
     <Compile Include="SLD_Window.xaml.vb">
       <DependentUpon>SLD_Window.xaml</DependentUpon>
     </Compile>
