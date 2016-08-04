@@ -2,8 +2,10 @@
 
 Imports AIMS_Styles_To_SLD
 
-Namespace AIMS_Styles_To_SLD.Tests
-    <TestClass()> Public Class SLDTests
+
+Namespace AIMS_Styles_To_SLD.Tests
+
+    <TestClass()> Public Class SLDTests
 
         <TestMethod()> Public Sub EqualTo()
             Dim test As String = ""
@@ -73,6 +75,30 @@ Imports AIMS_Styles_To_SLD
             test += "</OR>" & vbCrLf
             Assert.AreEqual(SLD.GenerateFilter("Typ = 1 OR col1 = 2").ToString, test)
         End Sub
+        <TestMethod()> Public Sub EqualTo2OR()
+            Dim test As String = ""
+            test += "<OR>" & vbCrLf
+            test += "<PropertyIsEqualTo>" & vbCrLf
+            test += "<PropertyName>Typ</PropertyName>" & vbCrLf
+            test += "<Literal>1</Literal>" & vbCrLf
+            test += "</PropertyIsEqualTo>" & vbCrLf
+
+            test += "<PropertyIsEqualTo>" & vbCrLf
+            test += "<PropertyName>col1</PropertyName>" & vbCrLf
+            test += "<Literal>2</Literal>" & vbCrLf
+            test += "</PropertyIsEqualTo>" & vbCrLf
+
+            test += "<PropertyIsEqualTo>" & vbCrLf
+            test += "<PropertyName>col2</PropertyName>" & vbCrLf
+            test += "<Literal>3</Literal>" & vbCrLf
+            test += "</PropertyIsEqualTo>" & vbCrLf
+            test += "</OR>" & vbCrLf
+
+            'Trace.WriteLine(SLD.GenerateFilter("Typ = 1 OR col1 = 2 OR col2 = 3").ToString)
+            'Trace.WriteLine(test)
+
+            Assert.AreEqual(SLD.GenerateFilter("Typ = 1 OR col1 = 2 OR col2 = 3").ToString, test)
+        End Sub
         <TestMethod()> Public Sub EqualToIN()
             Dim test As String = ""
             test += "<OR>" & vbCrLf
@@ -80,6 +106,7 @@ Imports AIMS_Styles_To_SLD
             test += "<PropertyName>Typ</PropertyName>" & vbCrLf
             test += "<Literal>test1</Literal>" & vbCrLf
             test += "</PropertyIsEqualTo>" & vbCrLf
+
             test += "<PropertyIsEqualTo>" & vbCrLf
             test += "<PropertyName>Typ</PropertyName>" & vbCrLf
             test += "<Literal>test2</Literal>" & vbCrLf
