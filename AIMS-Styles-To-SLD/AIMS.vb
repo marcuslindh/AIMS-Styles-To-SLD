@@ -292,11 +292,13 @@ Public Class AIMS
 
                             Dim Stroke = AreaSymbolization2DItem.Descendants("Stroke")
                             For Each StrokeItem In Stroke
-                                Rule.Stroke.LineStyle = Tools.IfElementToString(StrokeItem.Element("LineStyle"))
-                                Rule.Stroke.Thickness = Tools.IfElementToString(StrokeItem.Element("Thickness"))
-                                Rule.Stroke.Color = Tools.IfElementToString(StrokeItem.Element("Color"))
-                                Rule.Stroke.Unit = Tools.IfElementToString(StrokeItem.Element("Unit"))
-                                Rule.Stroke.SizeContext = Tools.IfElementToString(StrokeItem.Element("SizeContext"))
+                                Rule.Stroke.Add(New StyleRuleStroke With {
+                                                                            .LineStyle = Tools.IfElementToString(StrokeItem.Element("LineStyle")),
+                                                                            .Thickness = Tools.IfElementToString(StrokeItem.Element("Thickness")),
+                                                                            .Color = Tools.IfElementToString(StrokeItem.Element("Color")),
+                                                                            .Unit = Tools.IfElementToString(StrokeItem.Element("Unit")),
+                                                                            .SizeContext = Tools.IfElementToString(StrokeItem.Element("SizeContext"))
+                                                                        })
                             Next
                         Next
 
@@ -320,11 +322,13 @@ Public Class AIMS
 
                         Dim LineSymbolization2D = LineRuleItem.Descendants("LineSymbolization2D")
                         For Each LineSymbolization2DItem In LineSymbolization2D
-                            Rule.Stroke.LineStyle = Tools.IfElementToString(LineSymbolization2DItem.Element("LineStyle"))
-                            Rule.Stroke.Thickness = Tools.IfElementToString(LineSymbolization2DItem.Element("Thickness"))
-                            Rule.Stroke.Color = Tools.IfElementToString(LineSymbolization2DItem.Element("Color"))
-                            Rule.Stroke.Unit = Tools.IfElementToString(LineSymbolization2DItem.Element("Unit"))
-                            Rule.Stroke.SizeContext = Tools.IfElementToString(LineSymbolization2DItem.Element("SizeContext"))
+                            Rule.Stroke.Add(New StyleRuleStroke With {
+                                            .LineStyle = Tools.IfElementToString(LineSymbolization2DItem.Element("LineStyle")),
+                                            .Thickness = Tools.IfElementToString(LineSymbolization2DItem.Element("Thickness")),
+                                            .Color = Tools.IfElementToString(LineSymbolization2DItem.Element("Color")),
+                                            .Unit = Tools.IfElementToString(LineSymbolization2DItem.Element("Unit")),
+                                            .SizeContext = Tools.IfElementToString(LineSymbolization2DItem.Element("SizeContext"))
+                                        })
                         Next
                         Style.Rules.Add(Rule)
                     Next
@@ -574,7 +578,7 @@ Public Class LayerStyleRule
     Public Property LegendLabel As String = ""
     Public Property Filter As String = ""
     Public Property Fill As New StyleRuleFill
-    Public Property Stroke As New StyleRuleStroke
+    Public Property Stroke As New List(Of StyleRuleStroke)
     Public Property Label As New StyleRuleLabel
 End Class
 

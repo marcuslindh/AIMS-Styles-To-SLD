@@ -7,6 +7,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <TextBox Grid.Row="0" x:Name="SLD" />
+        <TextBox Grid.Row="0" x:Name="SLD" VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>

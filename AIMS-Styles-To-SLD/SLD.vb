@@ -2,6 +2,7 @@
 Imports System.Xml
 
 Public Class SLD
+    Public Shared Property RemoveÅÄÖ As Boolean = False
     Public Shared Function GenerateFilter(Filter As String) As StringBuilder
         Dim result As New List(Of SyntaxPart)
         Dim word As String = ""
@@ -209,7 +210,94 @@ Public Class SLD
         Return res
         'Return JsonConvert.SerializeObject(NewResult, Formatting.Indented)
     End Function
-    'Public Sub CreateSLD(ResourceId As String)
+    Private Shared Function ConvertNumberByUnitToPixals(Unit As String, Number As String, Optional ByRef ToString As Boolean = False)
+        Dim val As Double = Double.Parse(Number.Replace(".", ","))
+
+        Select Case Unit
+            Case "Millimeters"
+                If ToString Then Return Math.Round((val / 0.3528), 2).ToString().Replace(",", ".")
+                Return Math.Round((val / 0.3528), 2)
+            Case "Centimeters"
+                If ToString Then Return Math.Round((val * 100) / 0.3528, 2).ToString().Replace(",", ".")
+                Return Math.Round((val * 100) / 0.3528, 2)
+            Case "Meters"
+                If ToString Then Return Math.Round((val * 1000) / 0.3528, 2).ToString().Replace(",", ".")
+                Return Math.Round((val * 1000) / 0.3528, 2)
+            Case "Points"
+                If ToString Then Return Math.Round(val, 2).ToString().Replace(",", ".")
+                Return Math.Round(val, 2)
+        End Select
+        Return Number
+    End Function
+    Private Shared Function ConvertLineWidthByUnitToPixals(Unit As String, Number As String, Optional ByRef ToString As Boolean = False)
+        Dim val As Double = Double.Parse(Number.Replace(".", ","))
+
+        Dim GeoServerDPI As Integer = 90
+        Dim meters_per_inch As Double = 0.0254
+        Dim metersPerPixel As Double = meters_per_inch / GeoServerDPI
+
+        Select Case Unit
+            Case "Millimeters"
+                If ToString Then Return Math.Round(val / 0.3528, 2).ToString().Replace(",", ".")
+                Return Math.Round((val / 0.3528), 2)
+            Case "Centimeters"
+                'If ToString Then Return Math.Round((val * 10) / 0.3528, 2).ToString().Replace(",", ".")
+                'Return Math.Round((val * 100) / 0.3528, 2)
+
+                Return Math.Round(((val / 100)) / metersPerPixel, 2).ToString().Replace(",", ".")
+
+            Case "Meters"
+                If ToString Then Return Math.Round((val * 1000) / 0.3528, 2).ToString().Replace(",", ".")
+                Return Math.Round((val * 1000) / 0.3528, 2)
+            Case "Points"
+                If ToString Then Return Math.Round(val, 2).ToString().Replace(",", ".")
+                Return Math.Round(val, 2)
+        End Select
+        Return Number
+    End Function
+
+    Private Shared Sub RenderStroke(SLD As StringBuilder, Strokes As List(Of StyleRuleStroke), StyleType As LayerStyle.LayerStyleType, Optional ByVal SelectMin As Boolean = False)
+        If Not Strokes.Count = 0 Then
+            Dim MaxStroke = Strokes(0)
+
+            If SelectMin = True Then
+                For Each Stroke In Strokes
+                    If MaxStroke.Thickness > Stroke.Thickness Then
+                        MaxStroke = Stroke
+                    End If
+                Next
+            Else
+                For Each Stroke In Strokes
+                    If MaxStroke.Thickness < Stroke.Thickness Then
+                        MaxStroke = Stroke
+                    End If
+                Next
+            End If
+
+            If Not String.IsNullOrWhiteSpace(MaxStroke.Color) Then
+                SLD.Append("<Stroke>" & vbCrLf)
+                SLD.Append("<CssParameter name=""Stroke"">#" & MaxStroke.Color.Substring(2, MaxStroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+
+                Dim Thickness As String = 0
+                If StyleType = LayerStyle.LayerStyleType.Line Then
+                    Thickness = ConvertLineWidthByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
+                Else
+                    Thickness = ConvertNumberByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
+                End If
+
+                If MaxStroke.Thickness = 0 Then
+                    Thickness = "0.5"
+                End If
+                SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                If MaxStroke.LineStyle = "Dash" Then
+                    SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                End If
+                SLD.Append("</Stroke>" & vbCrLf)
+            End If
+
+        End If
+    End Sub
+
     Public Shared Sub CreateSLD(layer As LayerDefinition)
 
         Dim SLD As New StringBuilder
@@ -220,6 +308,10 @@ Public Class SLD
         SLD.Append("<NamedLayer>" & vbCrLf)
 
         'Dim layer = App.GetLayerDefinition(ResourceId)
+        If RemoveÅÄÖ Then
+            layer.FeatureName = layer.FeatureName.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
+        End If
+
 
         SLD.Append("<Name>" & layer.FeatureName.Replace("Default:", "") & "</Name>" & vbCrLf)
         SLD.Append("<UserStyle>" & vbCrLf)
@@ -232,10 +324,15 @@ Public Class SLD
             For Each item2 In item.Style
 
                 For Each item3 In item2.Rules
-                    If item3.Fill.FillPattern = "" And item3.Stroke.LineStyle = "" And item3.Label.FontName = "" Then Continue For
+                    If item3.Fill.FillPattern = "" And item3.Stroke.Count = 0 And item3.Label.FontName = "" Then Continue For
 
 
                     SLD.Append("<Rule>" & vbCrLf)
+
+                    If RemoveÅÄÖ Then
+                        item3.LegendLabel = item3.LegendLabel.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
+                    End If
+
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
@@ -259,39 +356,45 @@ Public Class SLD
                             SLD.Append("</Fill>" & vbCrLf)
                         End If
 
-                        If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
-                            SLD.Append("<Stroke>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
-                            Dim Thickness As String = item3.Stroke.Thickness
-                            If item3.Stroke.Thickness = 0 Then
-                                Thickness = "0.5"
-                            End If
-                            SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
-                            If item3.Stroke.LineStyle = "Dash" Then
-                                SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
-                            End If
-                            SLD.Append("</Stroke>" & vbCrLf)
-                        End If
+                        'For Each Stroke In item3.Stroke
+                        '    If Not String.IsNullOrWhiteSpace(Stroke.Color) Then
+                        '        SLD.Append("<Stroke>" & vbCrLf)
+                        '        SLD.Append("<CssParameter name=""Stroke"">#" & Stroke.Color.Substring(2, Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+                        '        Dim Thickness As String = ConvertNumberByUnitToPixals(Stroke.Unit, Stroke.Thickness, True)
+                        '        If Stroke.Thickness = 0 Then
+                        '            Thickness = "0.5"
+                        '        End If
+                        '        SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                        '        If Stroke.LineStyle = "Dash" Then
+                        '            SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                        '        End If
+                        '        SLD.Append("</Stroke>" & vbCrLf)
+                        '    End If
+                        'Next
 
+                        RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Area)
 
                         SLD.Append("</PolygonSymbolizer>" & vbCrLf)
                     ElseIf item2.Type = LayerStyle.LayerStyleType.Line Then
-                        If Not item3.Fill.FillPattern = "" Or Not item3.Stroke.LineStyle = "" Then
+                        If Not item3.Fill.FillPattern = "" Or Not item3.Stroke.Count = 0 Then
                             SLD.Append("<LineSymbolizer>" & vbCrLf)
 
-                            If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
-                                SLD.Append("<Stroke>" & vbCrLf)
-                                SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
-                                Dim Thickness As String = item3.Stroke.Thickness
-                                If item3.Stroke.Thickness = 0 Then
-                                    Thickness = "0.5"
-                                End If
-                                SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
-                                If item3.Stroke.LineStyle = "Dash" Then
-                                    SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
-                                End If
-                                SLD.Append("</Stroke>" & vbCrLf)
-                            End If
+
+                            RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Line)
+                            'If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
+                            '    SLD.Append("<Stroke>" & vbCrLf)
+                            '    SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+                            '    'Dim Thickness As String = ConvertNumberByUnitToPixals(item3.Stroke.Unit, item3.Stroke.Thickness, True)
+                            '    Dim Thickness As String = ConvertLineWidthByUnitToPixals(item3.Stroke.Unit, item3.Stroke.Thickness, True)
+                            '    If item3.Stroke.Thickness = 0 Then
+                            '        Thickness = "0.5"
+                            '    End If
+                            '    SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                            '    If item3.Stroke.LineStyle = "Dash" Then
+                            '        SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
+                            '    End If
+                            '    SLD.Append("</Stroke>" & vbCrLf)
+                            'End If
 
                             SLD.Append("</LineSymbolizer>" & vbCrLf)
                         End If
@@ -306,20 +409,20 @@ Public Class SLD
                             SLD.Append("<Font>" & vbCrLf)
                             SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
 
-                            Dim FontSize As Double = 0
-                            Select Case item3.Label.Unit
-                                Case "Millimeters"
-                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 0.3528)
-                                Case "Centimeters"
-                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 100) * 0.3528
-                                Case "Meters"
-                                    FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 1000) * 0.3528
-                                Case "Points"
-                                    FontSize = Double.Parse(item3.Label.SizeY.Replace(".", ","))
-                            End Select
+                            Dim FontSize As Double = ConvertNumberByUnitToPixals(item3.Label.Unit, item3.Label.SizeY, True)
+                            'Select Case item3.Label.Unit
+                            '    Case "Millimeters"
+                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 0.3528)
+                            '    Case "Centimeters"
+                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 100) * 0.3528
+                            '    Case "Meters"
+                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 1000) * 0.3528
+                            '    Case "Points"
+                            '        FontSize = Double.Parse(item3.Label.SizeY.Replace(".", ","))
+                            'End Select
 
 
-                            SLD.Append("<CssParameter name=""font-size"">" & Math.Round(FontSize, 2).ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""font-size"">" & FontSize.ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
 
                             If item3.Label.Italic = True Then
                                 SLD.Append("<CssParameter name=""font-style"">italic</CssParameter>" & vbCrLf)
@@ -360,6 +463,46 @@ Public Class SLD
         Next
 
         SLD.Append("</FeatureTypeStyle>" & vbCrLf)
+
+        For Each item In layer.VectorScaleRange
+
+            For Each item2 In item.Style
+
+                For Each item3 In item2.Rules
+                    If item3.Fill.FillPattern = "" And item3.Stroke.Count = 0 And item3.Label.FontName = "" Then Continue For
+                    If Not item2.Type = LayerStyle.LayerStyleType.Line Then Continue For
+                    SLD.Append("<FeatureTypeStyle>" & vbCrLf)
+                    SLD.Append("<Rule>" & vbCrLf)
+
+                    If RemoveÅÄÖ Then
+                        item3.LegendLabel = item3.LegendLabel.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
+                    End If
+
+                    SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
+                    If Not item.MaxScale = -1 Then
+                        SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
+                    End If
+                    If Not item.MinScale = -1 Then
+                        SLD.Append("<MinScaleDenominator>" & item.MinScale & "</MinScaleDenominator>" & vbCrLf)
+                    End If
+
+                    If Not String.IsNullOrWhiteSpace(item3.Filter) Then
+                        SLD.Append("<ogc:Filter>" & vbCrLf)
+                        SLD.Append(GenerateFilter(item3.Filter))
+                        SLD.Append("</ogc:Filter>" & vbCrLf)
+                    End If
+                    SLD.Append("<LineSymbolizer>" & vbCrLf)
+                    RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Line, True)
+                    SLD.Append("</LineSymbolizer>" & vbCrLf)
+
+                    SLD.Append("</Rule>" & vbCrLf)
+                    SLD.Append("</FeatureTypeStyle>" & vbCrLf)
+                Next
+            Next
+        Next
+
+
+
         SLD.Append("</UserStyle>" & vbCrLf)
         SLD.Append("</NamedLayer>")
         SLD.Append("</StyledLayerDescriptor>")

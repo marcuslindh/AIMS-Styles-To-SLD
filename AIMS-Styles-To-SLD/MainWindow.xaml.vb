@@ -144,18 +144,15 @@ Class MainWindow
     End Sub
 #End Region
 
-#Region "SLD"
-
-#End Region
-
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Login()
 
     End Sub
 
 
-
-
+    Private Sub RemoveÅÄÖ_Click(sender As Object, e As RoutedEventArgs)
+        SLD.RemoveÅÄÖ = RemoveÅÄÖ.IsChecked
+    End Sub
 End Class
 
 Public Class SyntaxPart
