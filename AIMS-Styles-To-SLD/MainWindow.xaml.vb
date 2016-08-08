@@ -1,9 +1,10 @@
 ﻿Imports System.Text
 Imports System.Xml
+Imports AIMS
 
 Class MainWindow
 
-    Public App As New AIMS
+    Public App As New Server
 
     Public Sub Login(Optional ByVal Username As String = "", Optional ByVal Site As String = "")
         Dim Log As New Login

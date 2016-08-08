@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports System.Xml
+Imports AIMS
 
 Public Class SLD
     Public Shared Property RemoveÅÄÖ As Boolean = False
@@ -236,6 +237,7 @@ Public Class SLD
         Dim meters_per_inch As Double = 0.0254
         Dim metersPerPixel As Double = meters_per_inch / GeoServerDPI
 
+
         Select Case Unit
             Case "Millimeters"
                 If ToString Then Return Math.Round(val / 0.3528, 2).ToString().Replace(",", ".")
@@ -256,7 +258,7 @@ Public Class SLD
         Return Number
     End Function
 
-    Private Shared Sub RenderStroke(SLD As StringBuilder, Strokes As List(Of StyleRuleStroke), StyleType As LayerStyle.LayerStyleType, Optional ByVal SelectMin As Boolean = False)
+    Private Shared Sub RenderStroke(SLD As StringBuilder, Strokes As List(Of AIMS.StyleRuleStroke), StyleType As AIMS.LayerStyle.LayerStyleType, Optional ByVal SelectMin As Boolean = False)
         If Not Strokes.Count = 0 Then
             Dim MaxStroke = Strokes(0)
 
@@ -279,7 +281,7 @@ Public Class SLD
                 SLD.Append("<CssParameter name=""Stroke"">#" & MaxStroke.Color.Substring(2, MaxStroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
 
                 Dim Thickness As String = 0
-                If StyleType = LayerStyle.LayerStyleType.Line Then
+                If StyleType = AIMS.LayerStyle.LayerStyleType.Line Then
                     Thickness = ConvertLineWidthByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
                 Else
                     Thickness = ConvertNumberByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
@@ -298,7 +300,7 @@ Public Class SLD
         End If
     End Sub
 
-    Public Shared Sub CreateSLD(layer As LayerDefinition)
+    Public Shared Sub CreateSLD(layer As AIMS.LayerDefinition)
 
         Dim SLD As New StringBuilder
 
