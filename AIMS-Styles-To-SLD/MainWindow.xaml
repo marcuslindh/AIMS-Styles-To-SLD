@@ -50,7 +50,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" x:Name="LayerName" Content="" FontSize="20" />
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" x:Name="LayerName" Text="" FontSize="20" />
 
                 <ListView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name="Scales">
                  
@@ -73,6 +73,8 @@
 
                 <CheckBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Content="Remove ÅÄÖ" Margin="10" x:Name="RemoveÅÄÖ" Click="RemoveÅÄÖ_Click" />
 
+                <Button Grid.Column="0" Grid.Row="3" x:Name="ReStyleButton" Content="ReStyle" Margin="5" Click="ReStyleButton_Click" />
+                
                 <Button Grid.Column="1" Grid.Row="3" Content="Export to SLD" IsEnabled="False" x:Name="ExportSLD" Margin="5" Click="ExportSLD_Click" />
             </Grid>
 

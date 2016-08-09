@@ -37,7 +37,10 @@ I:\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\AIMS-St
 I:\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\AIMS_Styles_To_SLD.Resources.resources
 I:\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\AIMS-Styles-To-SLD.vbproj.GenerateResource.Cache
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\AIMS-Styles-To-SLD.vbprojResolveAssemblyReference.cache
-C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\AIMS-Styles-To-SLD_Content.g.vb
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Release\AIMS.dll
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Release\AIMS.pdb
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Release\AIMS.xml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\ReStyle_Window.baml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\ReStyle_Window.g.vb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\ReStyle_PointStyle_Window.baml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Release\ReStyle_PointStyle_Window.g.vb

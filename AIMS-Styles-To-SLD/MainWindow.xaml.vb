@@ -118,7 +118,7 @@ Class MainWindow
     Private Sub Layers_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Layers.SelectionChanged
         Dim item = CType(Layers.SelectedItem, MapLayer)
 
-        LayerName.Content = item.Name
+        LayerName.Text = item.Name
 
         ExportSLD.IsEnabled = True
 
@@ -147,12 +147,19 @@ Class MainWindow
 
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Login()
-
     End Sub
 
 
     Private Sub RemoveÅÄÖ_Click(sender As Object, e As RoutedEventArgs)
         SLD.RemoveÅÄÖ = RemoveÅÄÖ.IsChecked
+    End Sub
+
+    Private Sub ReStyleButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim item = CType(Layers.SelectedItem, MapLayer)
+        Dim ReStyle As New ReStyle_Window
+        ReStyle.StartStyle = App.GetLayerDefinition(item.ResourceId)
+        ReStyle.LayerName.Text = item.Name
+        ReStyle.Show()
     End Sub
 End Class
 

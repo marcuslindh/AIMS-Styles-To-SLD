@@ -4,6 +4,37 @@ Imports AIMS
 
 Public Class SLD
     Public Shared Property RemoveÅÄÖ As Boolean = False
+
+    Public Shared Function ConvertFieldsToSLDFields(Style As LayerStyle) As LayerStyle
+        For Each Rule In Style.Rules
+            If Not Rule.Fill.BackgroundColor = "" Then
+                Rule.Fill.BackgroundColor = "#" & Rule.Fill.BackgroundColor.Substring(2, Rule.Fill.BackgroundColor.Length - 2)
+            End If
+            If Not Rule.Fill.ForegroundColor = "" Then
+                Rule.Fill.ForegroundColor = "#" & Rule.Fill.ForegroundColor.Substring(2, Rule.Fill.ForegroundColor.Length - 2)
+            End If
+
+            For Each item In Rule.Stroke
+                If Not item.Color = "" Then
+                    item.Color = "#" & item.Color.Substring(2, item.Color.Length - 2)
+                End If
+
+                Dim Thickness As String = 0
+                If Style.Type = LayerStyle.LayerStyleType.Line Then
+                    Thickness = ConvertLineWidthByUnitToPixals(item.Unit, item.Thickness, True)
+                Else
+                    Thickness = ConvertNumberByUnitToPixals(item.Unit, item.Thickness, True)
+                End If
+                item.Thickness = Thickness
+            Next
+        Next
+        
+
+
+
+        Return Style
+    End Function
+
     Public Shared Function GenerateFilter(Filter As String) As StringBuilder
         Dim result As New List(Of SyntaxPart)
         Dim word As String = ""

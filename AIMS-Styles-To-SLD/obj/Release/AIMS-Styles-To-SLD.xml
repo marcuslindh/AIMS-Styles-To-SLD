@@ -14,6 +14,22 @@ InitializeComponent
 	<summary>
 SLD_Window
 </summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window">
+	<summary>
+ReStyle_PointStyle_Window
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Window">
+	<summary>
+ReStyle_Window
+</summary>
 </member><member name="M:AIMS_Styles_To_SLD.Application.InitializeComponent">
 	<summary>
 InitializeComponent
