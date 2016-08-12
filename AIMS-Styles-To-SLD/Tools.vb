@@ -13,6 +13,9 @@ Public Class Tools
         Request.Headers("Authorization") = "Basic " & AuthInfo
     End Sub
 
+    Public Shared Function RemoveÅÄÖ(str As String) As String
+        Return str.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
+    End Function
 
 
 End Class

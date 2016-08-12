@@ -137,7 +137,7 @@ Class MainWindow
         Dim item = CType(Layers.SelectedItem, MapLayer)
         'Dim layer = App.GetLayerDefinition(item.ResourceId)
 
-        SLD.CreateSLD(App.GetLayerDefinition(item.ResourceId))
+        SLD.CreateSLD(App.GetLayerDefinition(item.ResourceId), True)
 
         'CreateSLD(item.ResourceId)
 
@@ -157,8 +157,10 @@ Class MainWindow
     Private Sub ReStyleButton_Click(sender As Object, e As RoutedEventArgs)
         Dim item = CType(Layers.SelectedItem, MapLayer)
         Dim ReStyle As New ReStyle_Window
-        ReStyle.StartStyle = App.GetLayerDefinition(item.ResourceId)
-        ReStyle.LayerName.Text = item.Name
+        If item IsNot Nothing Then
+            ReStyle.StartStyle = App.GetLayerDefinition(item.ResourceId)
+            ReStyle.LayerName.Text = item.Name
+        End If
         ReStyle.Show()
     End Sub
 End Class
