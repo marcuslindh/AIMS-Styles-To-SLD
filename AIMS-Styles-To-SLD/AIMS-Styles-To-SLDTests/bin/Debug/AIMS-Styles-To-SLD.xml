@@ -6,7 +6,23 @@ AIMS-Styles-To-SLD
 </name>
 </assembly>
 <members>
-<member name="M:AIMS_Styles_To_SLD.SLD_Window.InitializeComponent">
+<member name="M:AIMS_Styles_To_SLD.Login.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.Login">
+	<summary>
+Login
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Label_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Label_Window">
+	<summary>
+ReStyle_Label_Window
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.SLD_Window.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
@@ -14,21 +30,13 @@ InitializeComponent
 	<summary>
 SLD_Window
 </summary>
-</member><member name="M:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window.InitializeComponent">
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Filter.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window">
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Filter">
 	<summary>
-ReStyle_PointStyle_Window
-</summary>
-</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Window.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Window">
-	<summary>
-ReStyle_Window
+ReStyle_Filter
 </summary>
 </member><member name="M:AIMS_Styles_To_SLD.Application.InitializeComponent">
 	<summary>
@@ -50,13 +58,29 @@ InitializeComponent
 	<summary>
 MainWindow
 </summary>
-</member><member name="M:AIMS_Styles_To_SLD.Login.InitializeComponent">
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Style_Window.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:AIMS_Styles_To_SLD.Login">
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Style_Window">
 	<summary>
-Login
+ReStyle_Style_Window
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Window">
+	<summary>
+ReStyle_Window
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ColorTextbox.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ColorTextbox">
+	<summary>
+ColorTextbox
 </summary>
 </member><member name="P:AIMS_Styles_To_SLD.My.Resources.Resources.ResourceManager">
 	<summary>

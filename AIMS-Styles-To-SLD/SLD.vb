@@ -5,14 +5,31 @@ Imports AIMS
 Public Class SLD
     Public Shared Property RemoveÅÄÖ As Boolean = False
 
+
     Public Shared Function ConvertFieldsToSLDFields(Style As LayerStyle) As LayerStyle
         For Each Rule In Style.Rules
             If Not Rule.Fill.BackgroundColor = "" Then
-                Rule.Fill.BackgroundColor = "#" & Rule.Fill.BackgroundColor.Substring(2, Rule.Fill.BackgroundColor.Length - 2)
+                Rule.Fill.BackgroundColor = "#" & Rule.Fill.BackgroundColor.Substring(2, Rule.Fill.BackgroundColor.Length - 2).ToUpper
             End If
             If Not Rule.Fill.ForegroundColor = "" Then
-                Rule.Fill.ForegroundColor = "#" & Rule.Fill.ForegroundColor.Substring(2, Rule.Fill.ForegroundColor.Length - 2)
+                Rule.Fill.ForegroundColor = "#" & Rule.Fill.ForegroundColor.Substring(2, Rule.Fill.ForegroundColor.Length - 2).ToUpper
             End If
+
+            If Not Rule.Label.SizeY = "" Then
+                Rule.Label.SizeY = ConvertNumberByUnitToPixals(Rule.Label.Unit, Rule.Label.SizeY, True)
+            End If
+
+            Rule.Label.Text = Rule.Label.Text.Replace("""", "").Replace("'", "")
+
+            If Not Rule.Label.ForegroundColor = "" Then
+                Rule.Label.ForegroundColor = "#" & Rule.Label.ForegroundColor.Substring(2, Rule.Label.ForegroundColor.Length - 2).ToUpper
+            End If
+
+            If Not Rule.Label.BackgroundColor = "" Then
+                Rule.Label.BackgroundColor = "#" & Rule.Label.BackgroundColor.Substring(2, Rule.Label.BackgroundColor.Length - 2).ToUpper
+            End If
+
+            Rule.Label.SizeY = ConvertNumberByUnitToPixals(Rule.Label.Unit, Rule.Label.SizeY)
 
             For Each item In Rule.Stroke
                 If Not item.Color = "" Then
@@ -25,6 +42,10 @@ Public Class SLD
                 Else
                     Thickness = ConvertNumberByUnitToPixals(item.Unit, item.Thickness, True)
                 End If
+                If Thickness = 0 Then
+                    Thickness = "0.5"
+                End If
+
                 item.Thickness = Thickness
             Next
         Next
@@ -33,6 +54,39 @@ Public Class SLD
 
 
         Return Style
+    End Function
+    Public Shared Function RemoveÅÄÖFromLayerDefinition(layer As AIMS.LayerDefinition)
+        layer.FeatureName = Tools.RemoveÅÄÖ(layer.FeatureName)
+
+        For Each Scale In layer.VectorScaleRange
+            For Each item In Scale.Style
+                For Each Rule In item.Rules
+                    Rule.LegendLabel = Tools.RemoveÅÄÖ(Rule.LegendLabel)
+                Next
+            Next
+        Next
+        Return layer
+    End Function
+    Public Shared Function ConvertLayerDefinitionFieldsToSLDFields(layer As AIMS.LayerDefinition)
+
+        If RemoveÅÄÖ Then
+            layer.FeatureName = Tools.RemoveÅÄÖ(layer.FeatureName)
+        End If
+
+        layer.FeatureName = layer.FeatureName.Replace("Default:", "")
+
+        For Each Scale In layer.VectorScaleRange
+            For Each item In Scale.Style
+                item = ConvertFieldsToSLDFields(item)
+
+                For Each Rule In item.Rules
+                    If RemoveÅÄÖ Then
+                        Rule.LegendLabel = Tools.RemoveÅÄÖ(Rule.LegendLabel)
+                    End If
+                Next
+            Next
+        Next
+        Return layer
     End Function
 
     Public Shared Function GenerateFilter(Filter As String) As StringBuilder
@@ -243,6 +297,7 @@ Public Class SLD
         'Return JsonConvert.SerializeObject(NewResult, Formatting.Indented)
     End Function
     Private Shared Function ConvertNumberByUnitToPixals(Unit As String, Number As String, Optional ByRef ToString As Boolean = False)
+        If String.IsNullOrEmpty(Number) Then Return "0"
         Dim val As Double = Double.Parse(Number.Replace(".", ","))
 
         Select Case Unit
@@ -309,19 +364,20 @@ Public Class SLD
 
             If Not String.IsNullOrWhiteSpace(MaxStroke.Color) Then
                 SLD.Append("<Stroke>" & vbCrLf)
-                SLD.Append("<CssParameter name=""Stroke"">#" & MaxStroke.Color.Substring(2, MaxStroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
+                SLD.Append("<CssParameter name=""Stroke"">" & MaxStroke.Color & "</CssParameter>" & vbCrLf)
 
-                Dim Thickness As String = 0
-                If StyleType = AIMS.LayerStyle.LayerStyleType.Line Then
-                    Thickness = ConvertLineWidthByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
-                Else
-                    Thickness = ConvertNumberByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
-                End If
+                'Dim Thickness As String = 0
+                'If StyleType = AIMS.LayerStyle.LayerStyleType.Line Then
+                '    Thickness = ConvertLineWidthByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
+                'Else
+                '    Thickness = ConvertNumberByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
+                'End If
 
-                If MaxStroke.Thickness = 0 Then
-                    Thickness = "0.5"
-                End If
-                SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                'If MaxStroke.Thickness = 0 Then
+                '    Thickness = "0.5"
+                'End If
+                'SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
+                SLD.Append("<CssParameter name=""stroke-width"">" & MaxStroke.Thickness & "</CssParameter>" & vbCrLf)
                 If MaxStroke.LineStyle = "Dash" Then
                     SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
                 End If
@@ -331,7 +387,10 @@ Public Class SLD
         End If
     End Sub
 
-    Public Shared Sub CreateSLD(layer As AIMS.LayerDefinition)
+    Public Shared Sub CreateSLD(layer As AIMS.LayerDefinition, Optional ByVal FieldsToSLDFields As Boolean = False)
+        If FieldsToSLDFields Then
+            layer = ConvertLayerDefinitionFieldsToSLDFields(layer)
+        End If
 
         Dim SLD As New StringBuilder
 
@@ -340,15 +399,9 @@ Public Class SLD
         SLD.Append(vbCrLf)
         SLD.Append("<NamedLayer>" & vbCrLf)
 
-        'Dim layer = App.GetLayerDefinition(ResourceId)
-        If RemoveÅÄÖ Then
-            layer.FeatureName = layer.FeatureName.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
-        End If
-
-
-        SLD.Append("<Name>" & layer.FeatureName.Replace("Default:", "") & "</Name>" & vbCrLf)
+        SLD.Append("<Name>" & layer.FeatureName & "</Name>" & vbCrLf)
         SLD.Append("<UserStyle>" & vbCrLf)
-        SLD.Append("<Title>" & layer.FeatureName.Replace("Default:", "") & "</Title>" & vbCrLf)
+        SLD.Append("<Title>" & layer.FeatureName & "</Title>" & vbCrLf)
         SLD.Append("<FeatureTypeStyle>" & vbCrLf)
 
 
@@ -362,10 +415,6 @@ Public Class SLD
 
                     SLD.Append("<Rule>" & vbCrLf)
 
-                    If RemoveÅÄÖ Then
-                        item3.LegendLabel = item3.LegendLabel.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
-                    End If
-
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
@@ -376,7 +425,8 @@ Public Class SLD
 
                     If Not String.IsNullOrWhiteSpace(item3.Filter) Then
                         SLD.Append("<ogc:Filter>" & vbCrLf)
-                        SLD.Append(GenerateFilter(item3.Filter))
+                        'SLD.Append(GenerateFilter(item3.Filter))
+                        SLD.Append(SLDFilter.GenerateFilter(item3.Filter))
                         SLD.Append("</ogc:Filter>" & vbCrLf)
                     End If
 
@@ -385,25 +435,9 @@ Public Class SLD
 
                         If Not String.IsNullOrWhiteSpace(item3.Fill.ForegroundColor) Then
                             SLD.Append("<Fill>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""fill"">#" & item3.Fill.ForegroundColor.Substring(2, item3.Fill.ForegroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""fill"">" & item3.Fill.ForegroundColor & "</CssParameter>" & vbCrLf)
                             SLD.Append("</Fill>" & vbCrLf)
                         End If
-
-                        'For Each Stroke In item3.Stroke
-                        '    If Not String.IsNullOrWhiteSpace(Stroke.Color) Then
-                        '        SLD.Append("<Stroke>" & vbCrLf)
-                        '        SLD.Append("<CssParameter name=""Stroke"">#" & Stroke.Color.Substring(2, Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
-                        '        Dim Thickness As String = ConvertNumberByUnitToPixals(Stroke.Unit, Stroke.Thickness, True)
-                        '        If Stroke.Thickness = 0 Then
-                        '            Thickness = "0.5"
-                        '        End If
-                        '        SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
-                        '        If Stroke.LineStyle = "Dash" Then
-                        '            SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
-                        '        End If
-                        '        SLD.Append("</Stroke>" & vbCrLf)
-                        '    End If
-                        'Next
 
                         RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Area)
 
@@ -412,22 +446,7 @@ Public Class SLD
                         If Not item3.Fill.FillPattern = "" Or Not item3.Stroke.Count = 0 Then
                             SLD.Append("<LineSymbolizer>" & vbCrLf)
 
-
                             RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Line)
-                            'If Not String.IsNullOrWhiteSpace(item3.Stroke.Color) Then
-                            '    SLD.Append("<Stroke>" & vbCrLf)
-                            '    SLD.Append("<CssParameter name=""Stroke"">#" & item3.Stroke.Color.Substring(2, item3.Stroke.Color.Length - 2) & "</CssParameter>" & vbCrLf)
-                            '    'Dim Thickness As String = ConvertNumberByUnitToPixals(item3.Stroke.Unit, item3.Stroke.Thickness, True)
-                            '    Dim Thickness As String = ConvertLineWidthByUnitToPixals(item3.Stroke.Unit, item3.Stroke.Thickness, True)
-                            '    If item3.Stroke.Thickness = 0 Then
-                            '        Thickness = "0.5"
-                            '    End If
-                            '    SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
-                            '    If item3.Stroke.LineStyle = "Dash" Then
-                            '        SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
-                            '    End If
-                            '    SLD.Append("</Stroke>" & vbCrLf)
-                            'End If
 
                             SLD.Append("</LineSymbolizer>" & vbCrLf)
                         End If
@@ -436,13 +455,13 @@ Public Class SLD
                         If Not String.IsNullOrWhiteSpace(item3.Label.Text) Then
                             SLD.Append("<TextSymbolizer>" & vbCrLf)
                             SLD.Append("<Label>" & vbCrLf)
-                            SLD.Append("<ogc:PropertyName>" & item3.Label.Text.Replace("""", "").Replace("'", "") & "</ogc:PropertyName>" & vbCrLf)
+                            SLD.Append("<ogc:PropertyName>" & item3.Label.Text & "</ogc:PropertyName>" & vbCrLf)
                             SLD.Append("</Label>" & vbCrLf)
 
                             SLD.Append("<Font>" & vbCrLf)
                             SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
 
-                            Dim FontSize As Double = ConvertNumberByUnitToPixals(item3.Label.Unit, item3.Label.SizeY, True)
+                            'Dim FontSize As Double = ConvertNumberByUnitToPixals(item3.Label.Unit, item3.Label.SizeY, True)
                             'Select Case item3.Label.Unit
                             '    Case "Millimeters"
                             '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 0.3528)
@@ -455,7 +474,8 @@ Public Class SLD
                             'End Select
 
 
-                            SLD.Append("<CssParameter name=""font-size"">" & FontSize.ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY & "</CssParameter>" & vbCrLf)
+                            'SLD.Append("<CssParameter name=""font-size"">" & FontSize.ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
 
                             If item3.Label.Italic = True Then
                                 SLD.Append("<CssParameter name=""font-style"">italic</CssParameter>" & vbCrLf)
@@ -470,7 +490,7 @@ Public Class SLD
                             SLD.Append("</Font>" & vbCrLf)
 
                             SLD.Append("<Fill>" & vbCrLf)
-                            SLD.Append("<CssParameter name=""fill"">#" & item3.Label.ForegroundColor.Substring(2, item3.Label.ForegroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""fill"">#" & item3.Label.ForegroundColor & "</CssParameter>" & vbCrLf)
                             SLD.Append("</Fill>" & vbCrLf)
 
                             If Not item3.Label.BackgroundStyle = "Ghosted" Then
@@ -478,7 +498,7 @@ Public Class SLD
                                 SLD.Append("<Mark>" & vbCrLf)
                                 SLD.Append("<WellKnownName>square</WellKnownName>" & vbCrLf)
                                 SLD.Append("<Fill>" & vbCrLf)
-                                SLD.Append("<CssParameter name=""fill"">#" & item3.Label.BackgroundColor.Substring(2, item3.Label.BackgroundColor.Length - 2) & "</CssParameter>" & vbCrLf)
+                                SLD.Append("<CssParameter name=""fill"">#" & item3.Label.BackgroundColor & "</CssParameter>" & vbCrLf)
                                 SLD.Append("</Fill>" & vbCrLf)
                                 SLD.Append("</Mark>" & vbCrLf)
                                 SLD.Append("</Graphic>" & vbCrLf)
@@ -507,10 +527,6 @@ Public Class SLD
                     SLD.Append("<FeatureTypeStyle>" & vbCrLf)
                     SLD.Append("<Rule>" & vbCrLf)
 
-                    If RemoveÅÄÖ Then
-                        item3.LegendLabel = item3.LegendLabel.Replace("å", "a").Replace("ä", "a").Replace("ö", "o")
-                    End If
-
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
@@ -521,7 +537,7 @@ Public Class SLD
 
                     If Not String.IsNullOrWhiteSpace(item3.Filter) Then
                         SLD.Append("<ogc:Filter>" & vbCrLf)
-                        SLD.Append(GenerateFilter(item3.Filter))
+                        SLD.Append(SLDFilter.GenerateFilter(item3.Filter))
                         SLD.Append("</ogc:Filter>" & vbCrLf)
                     End If
                     SLD.Append("<LineSymbolizer>" & vbCrLf)

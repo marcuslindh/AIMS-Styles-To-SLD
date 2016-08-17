@@ -14,13 +14,21 @@ InitializeComponent
 	<summary>
 SLD_Window
 </summary>
-</member><member name="M:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window.InitializeComponent">
+</member><member name="M:AIMS_Styles_To_SLD.ColorPicker.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:AIMS_Styles_To_SLD.ReStyle_PointStyle_Window">
+</member><member name="T:AIMS_Styles_To_SLD.ColorPicker">
 	<summary>
-ReStyle_PointStyle_Window
+ColorPicker
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Label_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Label_Window">
+	<summary>
+ReStyle_Label_Window
 </summary>
 </member><member name="M:AIMS_Styles_To_SLD.ReStyle_Window.InitializeComponent">
 	<summary>
@@ -57,6 +65,38 @@ InitializeComponent
 </member><member name="T:AIMS_Styles_To_SLD.Login">
 	<summary>
 Login
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
+</summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_Style_Window.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_Style_Window">
+	<summary>
+ReStyle_Style_Window
 </summary>
 </member><member name="P:AIMS_Styles_To_SLD.My.Resources.Resources.ResourceManager">
 	<summary>

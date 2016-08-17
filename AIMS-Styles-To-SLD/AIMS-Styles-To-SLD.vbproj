@@ -22,6 +22,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>AIMS-Styles-To-SLD.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,6 +58,10 @@
     <Reference Include="AIMS">
       <HintPath>..\..\AIMS-Wrapper\bin\Release\AIMS.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -75,20 +80,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ReStyle\ColorTextbox.xaml.vb">
+      <DependentUpon>ColorTextbox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Login.xaml.vb">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReStyle_PointStyle_Window.xaml.vb">
-      <DependentUpon>ReStyle_PointStyle_Window.xaml</DependentUpon>
+    <Compile Include="ReStyle\ReStyle_Filter.xaml.vb">
+      <DependentUpon>ReStyle_Filter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReStyle_Window.xaml.vb">
+    <Compile Include="ReStyle\ReStyle_Label_Window.xaml.vb">
+      <DependentUpon>ReStyle_Label_Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReStyle\ReStyle_Style_Window.xaml.vb">
+      <DependentUpon>ReStyle_Style_Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReStyle\ReStyle_Window.xaml.vb">
       <DependentUpon>ReStyle_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="SLD.vb" />
+    <Compile Include="SLD_Filter.vb" />
     <Compile Include="SLD_Window.xaml.vb">
       <DependentUpon>SLD_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools.vb" />
+    <Page Include="ReStyle\ColorTextbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,11 +124,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReStyle_PointStyle_Window.xaml">
+    <Page Include="ReStyle\ReStyle_Filter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReStyle_Window.xaml">
+    <Page Include="ReStyle\ReStyle_Label_Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReStyle\ReStyle_Style_Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReStyle\ReStyle_Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -166,6 +193,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
