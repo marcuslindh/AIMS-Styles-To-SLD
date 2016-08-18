@@ -97,7 +97,12 @@ Public Class ReStyle_Window
     Private Sub ConditionButton_Click(sender As Object, e As RoutedEventArgs)
         Dim B = CType(sender, Button)
         Dim style = CType(B.CommandParameter, ReStyleRule)
-        MessageBox.Show(style.Condition)
+        'MessageBox.Show(style.Condition)
+
+        Dim w As New ReStyle_Filter
+        w.RootStyle = style
+        w.Show()
+
     End Sub
     Private Sub StyleButton_Click(sender As Object, e As RoutedEventArgs)
         Dim B = CType(sender, Button)
@@ -160,6 +165,19 @@ Public Class ReStyle_Window
 
     Private Sub RemoveÅÄÖ_Click(sender As Object, e As RoutedEventArgs)
 
+    End Sub
+
+    Private Sub AddScale_Click(sender As Object, e As RoutedEventArgs)
+        Dim add As New ReStyle_AddScale
+
+        If add.ShowDialog = True Then
+            Scales.Add(New ReStyleScale With {.From = add.From_TextBox.Text, .To = add.To_TextBox.Text})
+        End If
+
+    End Sub
+
+    Private Sub AddStyle_Click(sender As Object, e As RoutedEventArgs)
+        CType(ScaleRanges.SelectedItem, ReStyleScale).Rules.Add(New ReStyleRule)
     End Sub
 End Class
 
@@ -280,7 +298,7 @@ Public Class ReStyleRule
 
 End Class
 Public Class ReStyleRuleStyle
-    Public Property Fill As StyleRuleFill
+    Public Property Fill As New StyleRuleFill
     Public Property Stroke As New List(Of StyleRuleStroke)
 
     Private Property _Name As String = ""

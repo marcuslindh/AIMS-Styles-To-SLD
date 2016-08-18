@@ -19,7 +19,7 @@
       <PdhCountersEnabled>false</PdhCountersEnabled>
       <PdhCountersRate>500</PdhCountersRate>
       <PdhCounters>
-        <PdhCounter>\Fysisk disk(_Total)\Gnm.snittl. l&amp;amp;amp;#228;ngd p&amp;amp;amp;#229; disk-k&amp;amp;amp;#246;</PdhCounter>
+        <PdhCounter>\Fysisk disk(_Total)\Gnm.snittl. l&amp;amp;amp;amp;amp;#228;ngd p&amp;amp;amp;amp;amp;#229; disk-k&amp;amp;amp;amp;amp;#246;</PdhCounter>
         <PdhCounter>\Minne\Sidor/s</PdhCounter>
         <PdhCounter>\Processor(_Total)\% processortid</PdhCounter>
       </PdhCounters>

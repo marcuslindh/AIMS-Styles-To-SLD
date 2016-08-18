@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="AddScale" Content="Add Scale Range" Margin="5" IsEnabled="False" />
+            <Button Grid.Column="0" x:Name="AddScale" Content="Add Scale Range" Margin="5" IsEnabled="True" Click="AddScale_Click" />
             <Button Grid.Column="1" x:Name="DeleteScale" Content="Delete" Margin="5" Click="DeleteScale_Click" />
         </Grid>
 
@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="AddStyle" Content="Add Rule" Margin="5" IsEnabled="False" />
+            <Button Grid.Column="0" x:Name="AddStyle" Content="Add Rule" Margin="5" IsEnabled="True" Click="AddStyle_Click" />
             <Button Grid.Column="1" x:Name="DeleteStyle" Content="Delete" Margin="5" Click="DeleteStyle_Click" />
         </Grid>
 

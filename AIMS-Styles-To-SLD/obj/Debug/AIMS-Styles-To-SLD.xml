@@ -58,6 +58,14 @@ InitializeComponent
 	<summary>
 MainWindow
 </summary>
+</member><member name="M:AIMS_Styles_To_SLD.ReStyle_AddScale.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:AIMS_Styles_To_SLD.ReStyle_AddScale">
+	<summary>
+ReStyle_AddScale
+</summary>
 </member><member name="M:AIMS_Styles_To_SLD.ReStyle_Style_Window.InitializeComponent">
 	<summary>
 InitializeComponent

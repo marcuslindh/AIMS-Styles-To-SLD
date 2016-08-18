@@ -5,9 +5,16 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" x:Name="Filter" />
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.ColumnSpan="2" x:Name="Filter" />
+        <Button Grid.Row="1" Grid.Column="1" x:Name="Save" Content="Save" Margin="5" Click="Save_Click" />
+
     </Grid>
 </Window>
