@@ -211,28 +211,88 @@ Public Class SLDFilter
             End If
         Next
 
-        For i As Integer = 0 To Result.Count - 1
-            If Not i >= Result.Count - 1 Then
-                Dim item As SyntaxPartV2 = Result(i)
-                If item.Type = SyntaxPartV2.SyntaxPartType.Logic And item.text.ToUpper = "NOT" Then
-                    item.Nodes.Add(Result(i + 1))
-                    Result.Remove(Result(i + 1))
-                    i -= 1
-                End If
+        Dim NewResult As New ArrayList
+
+        Dim Count As Integer = Result.Count - 1
+        For i As Integer = 0 To Count
+            'If Not i >= Count Then
+            Dim item As SyntaxPartV2 = CType(Result(i), SyntaxPartV2)
+
+            If item.Type = SyntaxPartV2.SyntaxPartType.Logic And item.text.ToUpper = "NOT" Then
+                Dim item2 As SyntaxPartV2 = CType(Result(i + 1), SyntaxPartV2)
+
+
+                Dim NewNodes As New ArrayList
+                For Each node In item2.Nodes
+                    Dim NotItem As New SyntaxPartV2 With {
+                           .Type = SyntaxPartV2.SyntaxPartType.Logic,
+                           .text = "NOT"}
+
+                    NotItem.Nodes.Add(node)
+
+                    NewNodes.Add(NotItem)
+                Next
+
+                Dim newNode As New SyntaxPartV2 With {.text = item2.text, .Type = item2.Type}
+                newNode.Nodes = NewNodes
+                NewResult.Add(newNode)
+                i += 1
+            Else
+                NewResult.Add(item)
             End If
+
+            'If item.Type = SyntaxPartV2.SyntaxPartType.Logic And item.text.ToUpper = "NOT" Then
+            '    Dim node As SyntaxPartV2 = Result(i + 1)
+
+            '    If node.Type = SyntaxPartV2.SyntaxPartType.Logic Then
+            '        Dim newNodes As New ArrayList
+            '        For Each nodeitem In node.Nodes
+            '            Dim NotItem As New SyntaxPartV2 With {
+            '                .Type = SyntaxPartV2.SyntaxPartType.Logic,
+            '                .text = "NOT"}
+
+            '            NotItem.Nodes.Add(nodeitem)
+            '            newNodes.Add(NotItem)
+            '            'nodeitem = NotItem
+            '        Next
+            '        CType(Result(i + 1), SyntaxPartV2).Nodes.Clear()
+            '        CType(Result(i + 1), SyntaxPartV2).Nodes.AddRange(newNodes)
+            '    End If
+
+            'item.Nodes.Add(Result(i + 1))
+            'Result.Remove(Result(i))
+            'Count -= 1
+            'i += 1
+            'End If
+
+            'End If
+
+
         Next
 
+        'My.Computer.FileSystem.WriteAllText("C:\Temp\SLD_Filter.json", Newtonsoft.Json.JsonConvert.SerializeObject(NewResult, Newtonsoft.Json.Formatting.Indented) & vbCrLf, True)
 
-        Return Result
+
+
+        Return NewResult
     End Function
     Private Shared Sub GenerateSLDFilter_Variable(item As SyntaxPartV2, ByRef SLD As StringBuilder)
         If item.Nodes.Count > 1 Then
             SLD.Append("<OR>" & vbCrLf)
             For Each INitem As SyntaxPartV2 In item.Nodes
-                SLD.Append("<PropertyIsEqualTo>" & vbCrLf)
-                SLD.Append("<PropertyName>" & item.text.Replace("'", "").Replace("""", "") & "</PropertyName>" & vbCrLf)
-                SLD.Append("<Literal>" & INitem.text.Replace("'", "").Replace("""", "") & "</Literal>" & vbCrLf)
-                SLD.Append("</PropertyIsEqualTo>" & vbCrLf)
+                If INitem.Type = SyntaxPartV2.SyntaxPartType.Logic Then
+                    SLD.Append("<NOT>" & vbCrLf)
+                    SLD.Append("<PropertyIsEqualTo>" & vbCrLf)
+                    SLD.Append("<PropertyName>" & item.text.Replace("'", "").Replace("""", "") & "</PropertyName>" & vbCrLf)
+                    SLD.Append("<Literal>" & INitem.Nodes(0).text.Replace("'", "").Replace("""", "") & "</Literal>" & vbCrLf)
+                    SLD.Append("</PropertyIsEqualTo>" & vbCrLf)
+                    SLD.Append("</NOT>" & vbCrLf)
+                Else
+                    SLD.Append("<PropertyIsEqualTo>" & vbCrLf)
+                    SLD.Append("<PropertyName>" & item.text.Replace("'", "").Replace("""", "") & "</PropertyName>" & vbCrLf)
+                    SLD.Append("<Literal>" & INitem.text.Replace("'", "").Replace("""", "") & "</Literal>" & vbCrLf)
+                    SLD.Append("</PropertyIsEqualTo>" & vbCrLf)
+                End If
             Next
             SLD.Append("</OR>" & vbCrLf)
         Else
