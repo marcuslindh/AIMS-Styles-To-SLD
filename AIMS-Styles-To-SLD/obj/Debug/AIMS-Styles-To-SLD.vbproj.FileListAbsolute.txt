@@ -29,10 +29,8 @@ C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\De
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\ReStyle\ReStyle_Label_Window.baml
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\ReStyle\ReStyle_Filter.baml
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\ReStyle\ReStyle_Filter.g.vb
-C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.pdb
-C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.xml
-C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.xml
-C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.pdb
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.vbprojResolveAssemblyReference.cache
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\ReStyle\ReStyle_AddScale.baml
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\ReStyle\ReStyle_AddScale.g.vb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\bin\Debug\AIMS-Styles-To-SLD.pdb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\obj\Debug\AIMS-Styles-To-SLD.pdb

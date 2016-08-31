@@ -458,23 +458,44 @@ Public Class SLD
                             SLD.Append("<ogc:PropertyName>" & item3.Label.Text & "</ogc:PropertyName>" & vbCrLf)
                             SLD.Append("</Label>" & vbCrLf)
 
+
+                            If Not String.IsNullOrEmpty(item3.Label.Rotation) Then
+
+                                SLD.Append("<LabelPlacement>" & vbCrLf)
+                                SLD.Append("<PointPlacement>" & vbCrLf)
+
+                                SLD.Append("<AnchorPoint>" & vbCrLf)
+                                SLD.Append("<AnchorPointX>0</AnchorPointX>" & vbCrLf)
+                                SLD.Append("<AnchorPointY>0</AnchorPointY>" & vbCrLf)
+                                SLD.Append("</AnchorPoint>" & vbCrLf)
+
+                                SLD.Append("<Displacement>" & vbCrLf)
+                                SLD.Append("<DisplacementX>0</DisplacementX>" & vbCrLf)
+                                SLD.Append("<DisplacementY>0</DisplacementY>" & vbCrLf)
+                                SLD.Append("</Displacement>" & vbCrLf)
+
+                                SLD.Append("<Rotation>" & vbCrLf)
+                                'SLD.Append("-40" & vbCrLf)
+
+                                Dim d As Double
+                                If Double.TryParse(item3.Label.Rotation, d) Then
+                                    SLD.Append(d & vbCrLf)
+                                Else
+                                    SLD.Append("<Sub>" & vbCrLf)
+                                    SLD.Append("<Literal>360</Literal>" & vbCrLf)
+                                    SLD.Append("<PropertyName>" & item3.Label.Rotation & "</PropertyName>" & vbCrLf)
+                                    SLD.Append("</Sub>" & vbCrLf)
+                                End If
+                                SLD.Append("</Rotation>" & vbCrLf)
+
+                                SLD.Append("</PointPlacement>" & vbCrLf)
+                                SLD.Append("</LabelPlacement>" & vbCrLf)
+                            End If
+
                             SLD.Append("<Font>" & vbCrLf)
                             SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
 
-                            'Dim FontSize As Double = ConvertNumberByUnitToPixals(item3.Label.Unit, item3.Label.SizeY, True)
-                            'Select Case item3.Label.Unit
-                            '    Case "Millimeters"
-                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 0.3528)
-                            '    Case "Centimeters"
-                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 100) * 0.3528
-                            '    Case "Meters"
-                            '        FontSize = (Double.Parse(item3.Label.SizeY.Replace(".", ",")) / 1000) * 0.3528
-                            '    Case "Points"
-                            '        FontSize = Double.Parse(item3.Label.SizeY.Replace(".", ","))
-                            'End Select
-
-
-                            SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY & "</CssParameter>" & vbCrLf)
+                            SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY.Replace(",", ".") & "</CssParameter>" & vbCrLf)
                             'SLD.Append("<CssParameter name=""font-size"">" & FontSize.ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
 
                             If item3.Label.Italic = True Then
