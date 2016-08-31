@@ -9,6 +9,8 @@ Imports System.Text
 Public Class ReStyle_Window
     Public Property StartStyle As LayerDefinition
 
+    Private Shared FileFilter As String = "ReStyle (*.restyle)|*.restyle|JSON (*.json)|*.json|All files (*.*)|*.*"
+
     Public Property Scales As New ObservableCollection(Of ReStyleScale)
 
     Public Function GetDataInAIMSFormat() As LayerDefinition
@@ -111,6 +113,12 @@ Public Class ReStyle_Window
 
         Dim Style_Window As New ReStyle_Style_Window
         Style_Window.Styles = style.Style
+
+        AddHandler Style_Window.Closing, Sub()
+                                             ScaleRanges.Items.Refresh()
+                                             StyleRules.Items.Refresh()
+                                         End Sub
+
         Style_Window.Show()
     End Sub
     Private Sub FeatureLabelButton_Click(sender As Object, e As RoutedEventArgs)
@@ -119,47 +127,88 @@ Public Class ReStyle_Window
 
         Dim labelstyle As New ReStyle_Label_Window
         labelstyle.RootStyle = style.FeatureLabel
+
+        AddHandler labelstyle.Closing, Sub()
+                                           ScaleRanges.Items.Refresh()
+                                           StyleRules.Items.Refresh()
+                                       End Sub
+
         labelstyle.Show()
+
+
 
         'MessageBox.Show(style.FeatureLabel.Text)
     End Sub
 
     Private Sub DeleteStyle_Click(sender As Object, e As RoutedEventArgs)
-        Dim selected = CType(StyleRules.SelectedItem, ReStyleRule)
+
+        Dim RemoveItems As New ArrayList
+
         Dim Scale = CType(ScaleRanges.SelectedItem, ReStyleScale)
-        Scale.Rules.Remove(selected)
+
+        For Each style As ReStyleRule In StyleRules.SelectedItems
+            RemoveItems.Add(style)
+        Next
+
+        For Each item In RemoveItems
+            Scale.Rules.Remove(item)
+        Next
+
+        ScaleRanges.Items.Refresh()
+
+        'Dim selected = CType(StyleRules.SelectedItem, ReStyleRule)
+
+        'Scale.Rules.Remove(selected)
     End Sub
 
     Private Sub DeleteScale_Click(sender As Object, e As RoutedEventArgs)
-        Dim Scale = CType(ScaleRanges.SelectedItem, ReStyleScale)
-        Scales.Remove(Scale)
+
+        Dim RemoveItems As New ArrayList
+
+
+        For Each Scale As ReStyleScale In ScaleRanges.SelectedItems
+            RemoveItems.Add(Scale)
+        Next
+
+        For Each item In RemoveItems
+            Scales.Remove(item)
+        Next
+
+
+        'Dim Scale = CType(ScaleRanges.SelectedItem, ReStyleScale)
+        'Scales.Remove(Scale)
     End Sub
 
     Private Sub ExportToSLD_Click(sender As Object, e As RoutedEventArgs)
-
         SLD.CreateSLD(SLD.RemoveÅÄÖFromLayerDefinition(GetDataInAIMSFormat()))
     End Sub
 
     Private Sub SaveAs_Click(sender As Object, e As RoutedEventArgs)
         Dim s As New SaveFileDialog
-        s.Filter = "JSON (*.json)|*.json|All files (*.*)|*.*"
+        s.Filter = FileFilter
         s.FileName = StartStyle.FeatureName
         If s.ShowDialog = True Then
-            My.Computer.FileSystem.WriteAllText(s.FileName, JsonConvert.SerializeObject(GetDataInAIMSFormat(), Formatting.Indented), False)
+            My.Computer.FileSystem.WriteAllText(s.FileName, JsonConvert.SerializeObject(Scales, Formatting.Indented), False)
         End If
 
     End Sub
 
     Private Sub OpenAs_Click(sender As Object, e As RoutedEventArgs)
         Dim o As New OpenFileDialog
-        o.Filter = "All files (*.*)|*.*|JSON (*.json)|*.json"
+        o.Filter = FileFilter
 
         If o.ShowDialog = True Then
             Scales.Clear()
             Dim json As String = My.Computer.FileSystem.ReadAllText(o.FileName)
-            StartStyle = JsonConvert.DeserializeObject(json, GetType(LayerDefinition))
-            LayerName.Text = StartStyle.FeatureName
-            GetDataInReStyleFormat()
+            Dim SavedScales = JsonConvert.DeserializeObject(json, GetType(List(Of ReStyleScale)))
+
+            Scales.Clear()
+            For Each item In SavedScales
+                Scales.Add(item)
+            Next
+
+            'LayerName.Text = StartStyle.FeatureName
+            'GetDataInReStyleFormat()
         End If
     End Sub
 
@@ -178,6 +227,21 @@ Public Class ReStyle_Window
 
     Private Sub AddStyle_Click(sender As Object, e As RoutedEventArgs)
         CType(ScaleRanges.SelectedItem, ReStyleScale).Rules.Add(New ReStyleRule)
+    End Sub
+
+    Private Sub EditScale_Click(sender As Object, e As RoutedEventArgs)
+
+        Dim Scale = CType(ScaleRanges.SelectedItem, ReStyleScale)
+
+        Dim add As New ReStyle_AddScale
+        add.From_TextBox.Text = Scale.From
+        add.To_TextBox.Text = Scale.From
+
+        If add.ShowDialog = True Then
+            Scale.From = add.From_TextBox.Text
+            Scale.To = add.To_TextBox.Text
+            'Scales.Add(New ReStyleScale With {.From = add.From_TextBox.Text, .To = add.To_TextBox.Text})
+        End If
     End Sub
 End Class
 
@@ -212,8 +276,28 @@ Public Class ReStyleScale
             update()
         End Set
     End Property
-    Public Property Rules As New ObservableCollection(Of ReStyleRule)
+    Private Property _Rules As New ObservableCollection(Of ReStyleRule)
+    Public Property Rules As ObservableCollection(Of ReStyleRule)
+        Get
+            Return _Rules
+        End Get
+        Set(value As ObservableCollection(Of ReStyleRule))
+            _Rules = value
+            update()
+            update("Preview")
+        End Set
+    End Property
 
+    Public ReadOnly Property Preview As String
+        Get
+            Dim Res As New StringBuilder
+
+            For Each item In Rules
+                Res.Append(item.Formated)
+            Next
+            Return Res.ToString
+        End Get
+    End Property
 
 
 End Class
@@ -271,6 +355,7 @@ Public Class ReStyleRule
     End Property
     Public Property Type As LayerStyle.LayerStyleType
 
+
     Public ReadOnly Property Formated As String
         Get
             Dim str As New StringBuilder
@@ -298,8 +383,37 @@ Public Class ReStyleRule
 
 End Class
 Public Class ReStyleRuleStyle
-    Public Property Fill As New StyleRuleFill
-    Public Property Stroke As New List(Of StyleRuleStroke)
+    Implements INotifyPropertyChanged
+#Region "PropertyChanged"
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+    Private Sub update(<CallerMemberName()> Optional ByVal propertyName As String = Nothing)
+        'Trace.WriteLine(propertyName)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+    End Sub
+#End Region
+    Private Property _Fill As New StyleRuleFill
+    Public Property Fill As StyleRuleFill
+        Get
+            Return _Fill
+        End Get
+        Set(value As StyleRuleFill)
+            _Fill = value
+            update()
+            update("Formated")
+        End Set
+    End Property
+    Private Property _Stroke As New List(Of StyleRuleStroke)
+    Public Property Stroke As List(Of StyleRuleStroke)
+        Get
+            Return _Stroke
+        End Get
+        Set(value As List(Of StyleRuleStroke))
+            _Stroke = value
+            update()
+            update("Formated")
+        End Set
+    End Property
 
     Private Property _Name As String = ""
     Public Property Name As String

@@ -17,12 +17,14 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" x:Name="AddScale" Content="Add Scale Range" Margin="5" IsEnabled="True" Click="AddScale_Click" />
             <Button Grid.Column="1" x:Name="DeleteScale" Content="Delete" Margin="5" Click="DeleteScale_Click" />
+            <Button Grid.Column="2" x:Name="EditScale" Content="Edit" Margin="5" Click="EditScale_Click" />
         </Grid>
 
         <ListView Grid.Row="2" x:Name="ScaleRanges">
@@ -30,14 +32,15 @@
                 <GridView>
                     <GridViewColumn Width="200" Header="From" DisplayMemberBinding="{Binding From}"/>
                     <GridViewColumn Width="200" Header="To" DisplayMemberBinding="{Binding To}"/>
+                    <GridViewColumn Width="300" Header="Style" DisplayMemberBinding="{Binding Preview}" />
                 </GridView>
             </ListView.View>
         </ListView>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
