@@ -4,9 +4,14 @@
     Title="SLD" Height="622" Width="669" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <TextBox Grid.Row="0" x:Name="SLD" VerticalScrollBarVisibility="Auto" />
+        <ToolBar Grid.Row="0">
+            <Button Content="Show Log" x:Name="ShowLog" Click="ShowLog_Click" />
+        </ToolBar>
+        
+        <TextBox Grid.Row="1" x:Name="SLD" VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>
