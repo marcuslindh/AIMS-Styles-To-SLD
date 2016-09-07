@@ -1,0 +1,388 @@
+﻿## Start ##
+   Name: Funktionell_vagklass
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   49.61 #808080
+   47.83 #FFFFFF
+## Selected Stroke ##
+   49.61 #808080
+   Stroke Color: #808080
+   stroke width: 49.61
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 1000
+   MinScaleDenominator: 500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   42.52 #808080
+   40.75 #FFFFFF
+## Selected Stroke ##
+   42.52 #808080
+   Stroke Color: #808080
+   stroke width: 42.52
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 1500
+   MinScaleDenominator: 1000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   24.8 #808080
+   23.03 #FFFFFF
+## Selected Stroke ##
+   24.8 #808080
+   Stroke Color: #808080
+   stroke width: 24.8
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 2000
+   MinScaleDenominator: 1500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   17.72 #808080
+   15.94 #FFFFFF
+## Selected Stroke ##
+   17.72 #808080
+   Stroke Color: #808080
+   stroke width: 17.72
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 3000
+   MinScaleDenominator: 2000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   10.63 #808080
+   8.86 #FFFFFF
+## Selected Stroke ##
+   10.63 #808080
+   Stroke Color: #808080
+   stroke width: 10.63
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 4000
+   MinScaleDenominator: 3000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   8.86 #808080
+   7.09 #FFFFFF
+## Selected Stroke ##
+   8.86 #808080
+   Stroke Color: #808080
+   stroke width: 8.86
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 5000
+   MinScaleDenominator: 4000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   7.09 #808080
+   5.31 #FFFFFF
+## Selected Stroke ##
+   7.09 #808080
+   Stroke Color: #808080
+   stroke width: 7.09
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 10000
+   MinScaleDenominator: 5000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   5.31 #808080
+   3.54 #FFFFFF
+## Selected Stroke ##
+   5.31 #808080
+   Stroke Color: #808080
+   stroke width: 5.31
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 15000
+   MinScaleDenominator: 10000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #808080
+   1.77 #FFFFFF
+## Selected Stroke ##
+   3.54 #808080
+   Stroke Color: #808080
+   stroke width: 3.54
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 20000
+   MinScaleDenominator: 15000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #808080
+   1.77 #FFFFFF
+## Selected Stroke ##
+   3.54 #808080
+   Stroke Color: #808080
+   stroke width: 3.54
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 40000
+   MinScaleDenominator: 20000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #ACACAC
+   1.77 #FFFFFF
+## Selected Stroke ##
+   3.54 #ACACAC
+   Stroke Color: #ACACAC
+   stroke width: 3.54
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 50000
+   MinScaleDenominator: 40000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #ACACAC
+   1.77 #FFFFFF
+## Selected Stroke ##
+   3.54 #ACACAC
+   Stroke Color: #ACACAC
+   stroke width: 3.54
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 60000
+   MinScaleDenominator: 50000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:1
+   1.77 #C0C0C0
+## Selected Stroke ##
+   1.77 #C0C0C0
+   Stroke Color: #C0C0C0
+   stroke width: 1.77
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   49.61 #808080
+   47.83 #FFFFFF
+## Selected Stroke ##
+   47.83 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 47.83
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 1000
+   MinScaleDenominator: 500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   42.52 #808080
+   40.75 #FFFFFF
+## Selected Stroke ##
+   40.75 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 40.75
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 1500
+   MinScaleDenominator: 1000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   24.8 #808080
+   23.03 #FFFFFF
+## Selected Stroke ##
+   23.03 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 23.03
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 2000
+   MinScaleDenominator: 1500
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   17.72 #808080
+   15.94 #FFFFFF
+## Selected Stroke ##
+   15.94 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 15.94
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 3000
+   MinScaleDenominator: 2000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   10.63 #808080
+   8.86 #FFFFFF
+## Selected Stroke ##
+   8.86 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 8.86
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 4000
+   MinScaleDenominator: 3000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   8.86 #808080
+   7.09 #FFFFFF
+## Selected Stroke ##
+   7.09 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 7.09
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 5000
+   MinScaleDenominator: 4000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   7.09 #808080
+   5.31 #FFFFFF
+## Selected Stroke ##
+   5.31 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 5.31
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 10000
+   MinScaleDenominator: 5000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   5.31 #808080
+   3.54 #FFFFFF
+## Selected Stroke ##
+   3.54 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 3.54
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 15000
+   MinScaleDenominator: 10000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #808080
+   1.77 #FFFFFF
+## Selected Stroke ##
+   1.77 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 1.77
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 20000
+   MinScaleDenominator: 15000
+## Convert Filter ##
+   Filter: VALUE   IN (  '5' ,  '6' ,  '7' )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #808080
+   1.77 #FFFFFF
+## Selected Stroke ##
+   1.77 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 1.77
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 40000
+   MinScaleDenominator: 20000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #ACACAC
+   1.77 #FFFFFF
+## Selected Stroke ##
+   1.77 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 1.77
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 50000
+   MinScaleDenominator: 40000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:2
+   3.54 #ACACAC
+   1.77 #FFFFFF
+## Selected Stroke ##
+   1.77 #FFFFFF
+   Stroke Color: #FFFFFF
+   stroke width: 1.77
+## Rule ##
+   Title: Bilvag
+   MaxScaleDenominator: 60000
+   MinScaleDenominator: 50000
+## Convert Filter ##
+   Filter: VALUE  IN (  '1' ,  '2', '3', '4', '5', '6', '7'  )
+## Style Type: Line ##
+## Stroke ##
+   Count:1
+   1.77 #C0C0C0
+## Selected Stroke ##
+   1.77 #C0C0C0
+   Stroke Color: #C0C0C0
+   stroke width: 1.77

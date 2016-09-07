@@ -15,12 +15,12 @@ Public Class ReStyle_Window
 
     Public Function GetDataInAIMSFormat() As LayerDefinition
         Dim NewDef As New LayerDefinition
-        NewDef.FeatureName = StartStyle.FeatureName
-        NewDef.FeatureNameType = StartStyle.FeatureNameType
-        NewDef.Geometry = StartStyle.Geometry
-        NewDef.ResourceId = StartStyle.ResourceId
-        NewDef.ToolTip = StartStyle.ToolTip
-        NewDef.PropertyMapping = StartStyle.PropertyMapping
+        NewDef.FeatureName = LayerName.Text
+        'NewDef.FeatureNameType = LayerName.Text
+        'NewDef.Geometry = StartStyle.Geometry
+        'NewDef.ResourceId = StartStyle.ResourceId
+        'NewDef.ToolTip = StartStyle.ToolTip
+        'NewDef.PropertyMapping = StartStyle.PropertyMapping
 
         For Each Scale In Scales
             Dim NewScale As New VectorScaleRange
@@ -202,6 +202,10 @@ Public Class ReStyle_Window
             Dim json As String = My.Computer.FileSystem.ReadAllText(o.FileName)
             Dim SavedScales = JsonConvert.DeserializeObject(json, GetType(List(Of ReStyleScale)))
 
+            Dim f As New IO.FileInfo(o.FileName)
+
+            LayerName.Text = f.Name.Replace(f.Extension, "")
+
             Scales.Clear()
             For Each item In SavedScales
                 Scales.Add(item)
@@ -212,9 +216,7 @@ Public Class ReStyle_Window
         End If
     End Sub
 
-    Private Sub RemoveÅÄÖ_Click(sender As Object, e As RoutedEventArgs)
-
-    End Sub
+ 
 
     Private Sub AddScale_Click(sender As Object, e As RoutedEventArgs)
         Dim add As New ReStyle_AddScale

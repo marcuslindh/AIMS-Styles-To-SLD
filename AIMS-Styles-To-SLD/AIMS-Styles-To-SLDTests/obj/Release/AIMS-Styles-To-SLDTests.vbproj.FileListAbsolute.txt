@@ -12,3 +12,6 @@ C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-S
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\AIMS.dll
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\AIMS.pdb
 C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\AIMS.xml
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\Newtonsoft.Json.dll
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\AIMS-Styles-To-SLD.pdb
+C:\Users\marlin\Dropbox\Jobb\Github\AIMS-Styles-To-SLD\AIMS-Styles-To-SLD\AIMS-Styles-To-SLDTests\bin\Release\Newtonsoft.Json.xml
