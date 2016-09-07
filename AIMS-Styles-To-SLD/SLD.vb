@@ -1,10 +1,39 @@
 ﻿Imports System.Text
 Imports System.Xml
 Imports AIMS
+Imports System.IO
 
 Public Class SLD
     Public Shared Property RemoveÅÄÖ As Boolean = False
 
+    Private Shared Property LogFile As String = Environment.CurrentDirectory & "\SLD_Log.txt"
+    Private Shared Writer As StreamWriter
+    Private Shared WriterOpen As Boolean = False
+
+
+    Private Shared Sub ResetLog()
+        If Not WriterOpen Then
+            Writer = New StreamWriter(LogFile, False, System.Text.Encoding.UTF8)
+            WriterOpen = True
+        End If
+
+        'My.Computer.FileSystem.WriteAllText(LogFile, "", False)
+    End Sub
+
+    Private Shared Sub Log(text As String, Optional ByVal Header As Boolean = False)
+        If Not WriterOpen Then
+            Writer = New StreamWriter(LogFile, False, System.Text.Encoding.UTF8)
+            WriterOpen = True
+        End If
+        Dim str As String = ""
+        If Header = False Then
+            str = String.Format("   {0}", text)
+        Else
+            str = String.Format("## {0} ##", text)
+        End If
+        Writer.WriteLine(str)
+        'My.Computer.FileSystem.WriteAllText(LogFile, str, True)
+    End Sub
 
     Public Shared Function ConvertFieldsToSLDFields(Style As LayerStyle) As LayerStyle
         For Each Rule In Style.Rules
@@ -49,7 +78,7 @@ Public Class SLD
                 item.Thickness = Thickness
             Next
         Next
-        
+
 
 
 
@@ -348,24 +377,53 @@ Public Class SLD
         If Not Strokes.Count = 0 Then
             Dim MaxStroke = Strokes(0)
 
-            If SelectMin = True Then
-                For Each Stroke In Strokes
-                    If MaxStroke.Thickness > Stroke.Thickness Then
-                        MaxStroke = Stroke
-                    End If
-                Next
-            Else
-                For Each Stroke In Strokes
-                    If MaxStroke.Thickness < Stroke.Thickness Then
-                        MaxStroke = Stroke
-                    End If
-                Next
-            End If
+            Log("Stroke", True)
+            Log("Count:" & Strokes.Count)
+            For Each Stroke In Strokes
+                Log(String.Format("{0} {1}", Stroke.Thickness, Stroke.Color))
+            Next
+
+            Try
+                If SelectMin = True Then
+                    For Each Stroke In Strokes
+                        If CDbl(MaxStroke.Thickness.Replace(".", ",")) > CDbl(Stroke.Thickness.Replace(".", ",")) Then
+                            MaxStroke = Stroke
+                        End If
+                    Next
+                Else
+                    For Each Stroke In Strokes
+                        If CDbl(MaxStroke.Thickness.Replace(".", ",")) < CDbl(Stroke.Thickness.Replace(".", ",")) Then
+                            MaxStroke = Stroke
+                        End If
+                    Next
+                End If
+                Log("Selected Stroke", True)
+                Log(String.Format("{0} {1}", MaxStroke.Thickness, MaxStroke.Color))
+
+            Catch ex As Exception
+                MaxStroke = Strokes(0)
+                If SelectMin = True Then
+                    For Each Stroke In Strokes
+                        If MaxStroke.Thickness > Stroke.Thickness Then
+                            MaxStroke = Stroke
+                        End If
+                    Next
+                Else
+                    For Each Stroke In Strokes
+                        If MaxStroke.Thickness < Stroke.Thickness Then
+                            MaxStroke = Stroke
+                        End If
+                    Next
+                End If
+
+                Log("Selected Stroke", True)
+                Log(String.Format("{0} {1}", MaxStroke.Thickness, MaxStroke.Color))
+            End Try
 
             If Not String.IsNullOrWhiteSpace(MaxStroke.Color) Then
                 SLD.Append("<Stroke>" & vbCrLf)
                 SLD.Append("<CssParameter name=""Stroke"">" & MaxStroke.Color & "</CssParameter>" & vbCrLf)
-
+                Log("Stroke Color: " & MaxStroke.Color)
                 'Dim Thickness As String = 0
                 'If StyleType = AIMS.LayerStyle.LayerStyleType.Line Then
                 '    Thickness = ConvertLineWidthByUnitToPixals(MaxStroke.Unit, MaxStroke.Thickness, True)
@@ -378,6 +436,8 @@ Public Class SLD
                 'End If
                 'SLD.Append("<CssParameter name=""stroke-width"">" & Thickness & "</CssParameter>" & vbCrLf)
                 SLD.Append("<CssParameter name=""stroke-width"">" & MaxStroke.Thickness & "</CssParameter>" & vbCrLf)
+                Log("stroke width: " & MaxStroke.Thickness)
+
                 If MaxStroke.LineStyle = "Dash" Then
                     SLD.Append("<CssParameter name=""stroke-dasharray"">5 2</CssParameter>" & vbCrLf)
                 End If
@@ -391,6 +451,11 @@ Public Class SLD
         If FieldsToSLDFields Then
             layer = ConvertLayerDefinitionFieldsToSLDFields(layer)
         End If
+        ResetLog()
+
+        Log("Start", True)
+
+
 
         Dim SLD As New StringBuilder
 
@@ -398,6 +463,8 @@ Public Class SLD
         SLD.Append("<StyledLayerDescriptor version=""1.0.0"" xsi:schemaLocation=""http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"" xmlns=""://www.opengis.net/sld"" xmlns:ogc=""http://www.opengis.net/ogc"" xmlns:xlink=""http://www.w3.org/1999/xlink"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">")
         SLD.Append(vbCrLf)
         SLD.Append("<NamedLayer>" & vbCrLf)
+
+        Log("Name: " & layer.FeatureName)
 
         SLD.Append("<Name>" & layer.FeatureName & "</Name>" & vbCrLf)
         SLD.Append("<UserStyle>" & vbCrLf)
@@ -409,21 +476,30 @@ Public Class SLD
 
             For Each item2 In item.Style
 
+                'For Each item3 In item2.Rules
                 For Each item3 In item2.Rules
                     If item3.Fill.FillPattern = "" And item3.Stroke.Count = 0 And item3.Label.FontName = "" Then Continue For
 
 
                     SLD.Append("<Rule>" & vbCrLf)
 
+                    Log("Rule", True)
+                    Log("Title: " & item3.LegendLabel)
+
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
+                        Log("MaxScaleDenominator: " & item.MaxScale)
                     End If
                     If Not item.MinScale = -1 Then
                         SLD.Append("<MinScaleDenominator>" & item.MinScale & "</MinScaleDenominator>" & vbCrLf)
+                        Log("MinScaleDenominator: " & item.MinScale)
                     End If
 
                     If Not String.IsNullOrWhiteSpace(item3.Filter) Then
+                        Log("Convert Filter", True)
+                        Log("Filter: " & item3.Filter)
+
                         SLD.Append("<ogc:Filter>" & vbCrLf)
                         'SLD.Append(GenerateFilter(item3.Filter))
                         SLD.Append(SLDFilter.GenerateFilter(item3.Filter))
@@ -431,9 +507,13 @@ Public Class SLD
                     End If
 
                     If item2.Type = LayerStyle.LayerStyleType.Area Then
+                        Log("Style Type: Area", True)
+
                         SLD.Append("<PolygonSymbolizer>" & vbCrLf)
 
                         If Not String.IsNullOrWhiteSpace(item3.Fill.ForegroundColor) Then
+                            Log("Fill: " & item3.Fill.ForegroundColor)
+
                             SLD.Append("<Fill>" & vbCrLf)
                             SLD.Append("<CssParameter name=""fill"">" & item3.Fill.ForegroundColor & "</CssParameter>" & vbCrLf)
                             SLD.Append("</Fill>" & vbCrLf)
@@ -443,6 +523,8 @@ Public Class SLD
 
                         SLD.Append("</PolygonSymbolizer>" & vbCrLf)
                     ElseIf item2.Type = LayerStyle.LayerStyleType.Line Then
+                        Log("Style Type: Line", True)
+
                         If Not item3.Fill.FillPattern = "" Or Not item3.Stroke.Count = 0 Then
                             SLD.Append("<LineSymbolizer>" & vbCrLf)
 
@@ -451,8 +533,11 @@ Public Class SLD
                             SLD.Append("</LineSymbolizer>" & vbCrLf)
                         End If
                     ElseIf item2.Type = LayerStyle.LayerStyleType.Point Then
-
+                        Log("Style Type: Point", True)
                         If Not String.IsNullOrWhiteSpace(item3.Label.Text) Then
+                            Log("Label", True)
+                            Log("Text: " & item3.Label.Text)
+
                             SLD.Append("<TextSymbolizer>" & vbCrLf)
                             SLD.Append("<Label>" & vbCrLf)
                             SLD.Append("<ogc:PropertyName>" & item3.Label.Text & "</ogc:PropertyName>" & vbCrLf)
@@ -480,7 +565,10 @@ Public Class SLD
                                 Dim d As Double
                                 If Double.TryParse(item3.Label.Rotation, d) Then
                                     SLD.Append(d & vbCrLf)
+                                    Log("Rotation: " & d)
                                 Else
+                                    Log("Rotation: " & item3.Label.Rotation)
+
                                     SLD.Append("<Sub>" & vbCrLf)
                                     SLD.Append("<Literal>360</Literal>" & vbCrLf)
                                     SLD.Append("<PropertyName>" & item3.Label.Rotation & "</PropertyName>" & vbCrLf)
@@ -492,29 +580,41 @@ Public Class SLD
                                 SLD.Append("</LabelPlacement>" & vbCrLf)
                             End If
 
+                            Log("Font", True)
+
                             SLD.Append("<Font>" & vbCrLf)
                             SLD.Append("<CssParameter name=""font-family"">" & item3.Label.FontName & "</CssParameter>" & vbCrLf)
+                            Log("font-family: " & item3.Label.FontName)
 
                             SLD.Append("<CssParameter name=""font-size"">" & item3.Label.SizeY.Replace(",", ".") & "</CssParameter>" & vbCrLf)
+                            Log("font-size: " & item3.Label.SizeY.Replace(",", "."))
+
                             'SLD.Append("<CssParameter name=""font-size"">" & FontSize.ToString.Replace(",", ".") & "</CssParameter>" & vbCrLf)
 
                             If item3.Label.Italic = True Then
                                 SLD.Append("<CssParameter name=""font-style"">italic</CssParameter>" & vbCrLf)
+                                Log("font-style: italic")
                             Else
                                 SLD.Append("<CssParameter name=""font-style"">normal</CssParameter>" & vbCrLf)
+                                Log("font-style: normal")
                             End If
 
                             If item3.Label.Bold = True Then
                                 SLD.Append("<CssParameter name=""font-weight"">bold</CssParameter>" & vbCrLf)
+                                Log("font-weight: bold")
                             End If
 
                             SLD.Append("</Font>" & vbCrLf)
+
+                            Log("Fill: " & item3.Label.ForegroundColor)
 
                             SLD.Append("<Fill>" & vbCrLf)
                             SLD.Append("<CssParameter name=""fill"">#" & item3.Label.ForegroundColor & "</CssParameter>" & vbCrLf)
                             SLD.Append("</Fill>" & vbCrLf)
 
                             If Not item3.Label.BackgroundStyle = "Ghosted" Then
+                                Log("BackgroundColor: " & item3.Label.BackgroundColor)
+
                                 SLD.Append("<Graphic>" & vbCrLf)
                                 SLD.Append("<Mark>" & vbCrLf)
                                 SLD.Append("<WellKnownName>square</WellKnownName>" & vbCrLf)
@@ -548,22 +648,35 @@ Public Class SLD
                     SLD.Append("<FeatureTypeStyle>" & vbCrLf)
                     SLD.Append("<Rule>" & vbCrLf)
 
+                    Log("Rule", True)
+                    Log("Title: " & item3.LegendLabel)
+
                     SLD.Append("<Title>" & item3.LegendLabel & "</Title>" & vbCrLf)
                     If Not item.MaxScale = -1 Then
                         SLD.Append("<MaxScaleDenominator>" & item.MaxScale & "</MaxScaleDenominator>" & vbCrLf)
+                        Log("MaxScaleDenominator: " & item.MaxScale)
                     End If
                     If Not item.MinScale = -1 Then
                         SLD.Append("<MinScaleDenominator>" & item.MinScale & "</MinScaleDenominator>" & vbCrLf)
+                        Log("MinScaleDenominator: " & item.MinScale)
                     End If
 
                     If Not String.IsNullOrWhiteSpace(item3.Filter) Then
+                        Log("Convert Filter", True)
+                        Log("Filter: " & item3.Filter)
+
                         SLD.Append("<ogc:Filter>" & vbCrLf)
                         SLD.Append(SLDFilter.GenerateFilter(item3.Filter))
                         SLD.Append("</ogc:Filter>" & vbCrLf)
                     End If
-                    SLD.Append("<LineSymbolizer>" & vbCrLf)
-                    RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Line, True)
-                    SLD.Append("</LineSymbolizer>" & vbCrLf)
+
+                    If item2.Type = LayerStyle.LayerStyleType.Line Then
+                        Log("Style Type: Line", True)
+
+                        SLD.Append("<LineSymbolizer>" & vbCrLf)
+                        RenderStroke(SLD, item3.Stroke, LayerStyle.LayerStyleType.Line, True)
+                        SLD.Append("</LineSymbolizer>" & vbCrLf)
+                    End If
 
                     SLD.Append("</Rule>" & vbCrLf)
                     SLD.Append("</FeatureTypeStyle>" & vbCrLf)
@@ -592,8 +705,9 @@ Public Class SLD
 
         SLDWin.Show()
 
-
-
+        Writer.Flush()
+        Writer.Close()
+        WriterOpen = False
         'My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.Temp & "\SLD.xml", SLD.ToString, False)
         'System.Diagnostics.Process.Start(My.Computer.FileSystem.SpecialDirectories.Temp & "\SLD.xml")
     End Sub
